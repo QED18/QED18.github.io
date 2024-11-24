@@ -29,3 +29,22 @@ document.addEventListener('keydown', (event) => {
         alert('Inspect Element is disabled on this website.');
     }
 });
+
+// Vimeo Player Controls (If Vimeo Player API is needed)
+const iframe = document.querySelector('iframe');
+const player = new Vimeo.Player(iframe);
+
+// Example: Start autoplay when the main page is shown
+player.on('loaded', () => {
+    player.play().catch((error) => {
+        console.error('Error starting playback:', error);
+    });
+});
+
+// Example: Log events (optional)
+player.on('play', () => {
+    console.log('Video is playing');
+});
+player.on('pause', () => {
+    console.log('Video is paused');
+});
