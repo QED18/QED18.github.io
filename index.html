@@ -5,18 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Video Background</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+            border: none;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-links img {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .social-links img:hover {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+        .sound-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1;
+        }
+        .sound-controls button {
+            margin: 5px;
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .sound-controls button:hover {
+            background-color: gray;
+        }
+    </style>
 </head>
 <body>
     <!-- Background Video -->
     <iframe title="vimeo-player" 
-            src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1&muted=1&background=1" 
+            src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1&background=1" 
             frameborder="0" 
             allow="autoplay; fullscreen" 
-            allowfullscreen 
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+            allowfullscreen>
     </iframe>
 
-    <!-- Social Media Section -->
+    <!-- Content -->
     <div class="content">
         <h1>Welcome to My Website</h1>
         <div class="social-links">
@@ -42,4 +99,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
