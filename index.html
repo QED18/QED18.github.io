@@ -6,6 +6,7 @@
     <title>Music Video Background</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Ensure the video iframe covers the screen */
         body, html {
             margin: 0;
             padding: 0;
@@ -22,6 +23,7 @@
             z-index: -1;
             border: none;
         }
+        /* Content overlay styling */
         .content {
             position: relative;
             z-index: 1;
@@ -71,7 +73,7 @@
 <body>
     <!-- Background Video -->
     <iframe title="vimeo-player" 
-            src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1" 
+            src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1&muted=1&background=1" 
             frameborder="0" 
             allow="autoplay; fullscreen" 
             allowfullscreen>
@@ -103,3 +105,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
