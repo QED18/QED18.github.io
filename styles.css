@@ -21,10 +21,11 @@ body, html {
     justify-content: center;
     align-items: center;
     z-index: 2;
+    text-align: center;
 }
 
 #landing-page button {
-    padding: 15px 30px;
+    padding: 1rem 2rem;
     font-size: 1.2rem;
     color: white;
     background-color: red;
@@ -65,18 +66,20 @@ iframe {
     transform: translate(-50%, -50%);
     z-index: 1;
     text-align: center;
+    width: 90%; /* Adjusts for smaller screens */
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 2rem; /* Responsive font size */
     font-weight: 700;
     margin-bottom: 20px;
 }
 
+/* Social Links */
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 1rem;
 }
 
 .social-links img {
@@ -90,3 +93,30 @@ h1 {
     opacity: 0.8;
 }
 
+/* Media Queries for Phones */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem; /* Smaller font size for mobile */
+    }
+
+    #landing-page button {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .social-links img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2rem; /* Even smaller for very small screens */
+    }
+
+    .social-links img {
+        width: 25px;
+        height: 25px;
+    }
+}
