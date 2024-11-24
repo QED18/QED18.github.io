@@ -13,11 +13,11 @@ startButton.addEventListener('click', () => {
     landingPage.style.display = 'none';
     mainPage.style.display = 'block';
 
-    // Start playing the video with sound
+    // Ensure the video plays with sound after user interaction
     player.setVolume(1).then(() => {
-        player.play();
+        return player.play();
     }).catch((error) => {
-        console.error('Error starting playback with sound:', error);
+        console.error('Error starting video with sound:', error);
     });
 
     // Request fullscreen
