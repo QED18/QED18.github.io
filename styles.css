@@ -43,11 +43,14 @@ body, html {
 /* Typing Animation */
 #typing-text {
     overflow: hidden;
-    border-right: 3px solid white;
+    display: inline-block;
     white-space: nowrap;
     margin: 0 auto;
     font-size: 1.8rem;
-    animation: typing 3s steps(22, end), blink 0.5s step-end infinite;
+    color: white;
+    border-right: 3px solid white;
+    width: 0; /* Ensures the typing animation starts from 0 width */
+    animation: typing 3s steps(30, end) forwards, blink 0.5s step-end infinite;
 }
 
 @keyframes typing {
