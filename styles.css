@@ -5,7 +5,6 @@ body, html {
     overflow: hidden;
     height: 100%;
     font-family: 'Poppins', sans-serif;
-    border: 10px solid black; /* Add black borders */
 }
 
 /* Landing page styles */
