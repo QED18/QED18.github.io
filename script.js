@@ -3,18 +3,29 @@ const landingPage = document.getElementById('landing-page');
 const mainPage = document.getElementById('main-page');
 const startButton = document.getElementById('start-button');
 
+// Initialize Vimeo Player API
+const iframe = document.querySelector('iframe');
+const player = new Vimeo.Player(iframe);
+
 // Add event listener to the "Click Here" button
 startButton.addEventListener('click', () => {
     // Hide landing page and show main page
     landingPage.style.display = 'none';
     mainPage.style.display = 'block';
 
-    // Request fullscreen mode
+    // Start playing the video with sound
+    player.setVolume(1).then(() => {
+        player.play();
+    }).catch((error) => {
+        console.error('Error starting playback with sound:', error);
+    });
+
+    // Request fullscreen
     if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
-    } else if (document.documentElement.webkitRequestFullscreen) { // For Safari
+    } else if (document.documentElement.webkitRequestFullscreen) { // Safari
         document.documentElement.webkitRequestFullscreen();
-    } else if (document.documentElement.msRequestFullscreen) { // For IE11
+    } else if (document.documentElement.msRequestFullscreen) { // IE11
         document.documentElement.msRequestFullscreen();
     }
 });
@@ -37,4 +48,3 @@ document.addEventListener('keydown', (event) => {
         alert('Inspect Element is disabled on this website.');
     }
 });
-
