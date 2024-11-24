@@ -4,6 +4,7 @@ body, html {
     padding: 0;
     overflow: hidden;
     height: 100%;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Landing page styles */
@@ -58,17 +59,24 @@ iframe {
 }
 
 .content {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
     text-align: center;
-    color: white;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .social-links {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 20px;
 }
 
 .social-links img {
