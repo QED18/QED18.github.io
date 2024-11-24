@@ -7,14 +7,6 @@ body, html {
     font-family: 'Poppins', sans-serif;
 }
 
-/* Interactive Background */
-#particles-js {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-}
-
 /* Landing page styles */
 #landing-page {
     position: absolute;
@@ -31,40 +23,7 @@ body, html {
     z-index: 2;
 }
 
-/* Text Logo */
-#text-logo {
-    font-size: 4rem;
-    font-weight: bold;
-    color: red;
-    margin-bottom: 20px;
-    animation: fade-in 3s;
-}
-
-/* Typing Animation */
-#typing-text {
-    overflow: hidden;
-    display: inline-block;
-    white-space: nowrap;
-    margin: 0 auto;
-    font-size: 1.8rem;
-    color: white;
-    border-right: 3px solid white;
-    width: 0; /* Ensures the typing animation starts from 0 width */
-    animation: typing 3s steps(30, end) forwards, blink 0.5s step-end infinite;
-}
-
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-@keyframes blink {
-    from, to { border-color: transparent; }
-    50% { border-color: white; }
-}
-
-/* Animated Button */
-#start-button {
+#landing-page button {
     padding: 15px 30px;
     font-size: 1.2rem;
     color: white;
@@ -72,15 +31,62 @@ body, html {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6);
-    animation: glow 2s infinite alternate;
 }
 
-#start-button:hover {
+#landing-page button:hover {
     background-color: darkred;
 }
 
-@keyframes glow {
-    0% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); }
-    100% { box-shadow: 0 0 30px rgba(255, 0, 0, 1); }
+/* Main page styles */
+#main-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
 }
+
+iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    border: none;
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-links img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.social-links img:hover {
+    transform: scale(1.2);
+    opacity: 0.8;
+}
+
