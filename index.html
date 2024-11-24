@@ -3,16 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Video Background</title>
+    <title>Welcome</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Ensure the video iframe covers the screen */
+        /* General styles */
         body, html {
             margin: 0;
             padding: 0;
             overflow: hidden;
             height: 100%;
+            font-family: Arial, sans-serif;
         }
+
+        /* Landing page styles */
+        #landing-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        #landing-page h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        #landing-page button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: red;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #landing-page button:hover {
+            background-color: darkred;
+        }
+
+        /* Main page styles */
+        #main-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none; /* Hidden initially */
+        }
+
         iframe {
             position: absolute;
             top: 0;
@@ -23,86 +70,67 @@
             z-index: -1;
             border: none;
         }
-        /* Content overlay styling */
+
         .content {
             position: relative;
             z-index: 1;
             text-align: center;
             color: white;
-            font-family: Arial, sans-serif;
         }
+
         .social-links {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-top: 20px;
         }
+
         .social-links img {
             width: 40px;
             height: 40px;
             transition: transform 0.3s, opacity 0.3s;
         }
+
         .social-links img:hover {
             transform: scale(1.2);
             opacity: 0.8;
         }
-        .sound-controls {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1;
-        }
-        .sound-controls button {
-            margin: 5px;
-            padding: 10px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .sound-controls button:hover {
-            background-color: gray;
-        }
-        .sound-controls input[type="range"] {
-            margin: 5px;
-            width: 150px;
-        }
     </style>
 </head>
 <body>
-    <!-- Background Video -->
-    <iframe title="vimeo-player" 
-            src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1&muted=1&background=1" 
-            frameborder="0" 
-            allow="autoplay; fullscreen" 
-            allowfullscreen>
-    </iframe>
-
-    <!-- Content -->
-    <div class="content">
+    <!-- Landing Page -->
+    <div id="landing-page">
         <h1>Welcome to My Website</h1>
-        <div class="social-links">
-            <a href="https://instagram.com/q.ed_" target="_blank">
-                <img src="instagram-logo.png" alt="Instagram">
-            </a>
-            <a href="https://tiktok.com/@qed1" target="_blank">
-                <img src="tiktok-logo.png" alt="TikTok">
-            </a>
-            <a href="https://snapchat.com/add/q.ed0" target="_blank">
-                <img src="snapchat-logo.png" alt="Snapchat">
-            </a>
+        <button id="start-button">Click Here to Enter</button>
+    </div>
+
+    <!-- Main Page -->
+    <div id="main-page">
+        <!-- Background Video -->
+        <iframe title="vimeo-player" 
+                src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1&background=1" 
+                frameborder="0" 
+                allow="autoplay; fullscreen" 
+                allowfullscreen>
+        </iframe>
+
+        <!-- Content -->
+        <div class="content">
+            <h1>Welcome to My Website</h1>
+            <div class="social-links">
+                <a href="https://instagram.com/q.ed_" target="_blank">
+                    <img src="instagram-logo.png" alt="Instagram">
+                </a>
+                <a href="https://tiktok.com/@qed1" target="_blank">
+                    <img src="tiktok-logo.png" alt="TikTok">
+                </a>
+                <a href="https://snapchat.com/add/q.ed0" target="_blank">
+                    <img src="snapchat-logo.png" alt="Snapchat">
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Sound Control Buttons -->
-    <div class="sound-controls">
-        <button id="mute-toggle">Mute</button>
-        <input id="volume-slider" type="range" min="0" max="100" value="50">
-    </div>
-
-    <script src="https://player.vimeo.com/api/player.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
-
