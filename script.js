@@ -7,17 +7,17 @@ const startButton = document.getElementById('start-button');
 const iframe = document.querySelector('iframe');
 const player = new Vimeo.Player(iframe);
 
-// Add event listener to "Click Here" button
+// Add event listener to the "Click Here" button
 startButton.addEventListener('click', () => {
     // Hide landing page and show main page
     landingPage.style.display = 'none';
     mainPage.style.display = 'block';
 
-    // Start playing video with sound
+    // Start playing the video with sound
     player.setVolume(1).then(() => {
         player.play();
     }).catch((error) => {
-        console.error('Error playing video:', error);
+        console.error('Error starting playback with sound:', error);
     });
 });
 
