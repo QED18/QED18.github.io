@@ -4,91 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
-    <style>
-        /* General page styles */
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100%;
-        }
-
-        /* Landing page styles */
-        #landing-page {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: black;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2;
-        }
-
-        #landing-page button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            color: white;
-            background-color: red;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #landing-page button:hover {
-            background-color: darkred;
-        }
-
-        /* Main page styles */
-        #main-page {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: none;
-        }
-
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-            border: none;
-        }
-
-        .content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            color: white;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-links img {
-            width: 40px;
-            height: 40px;
-            transition: transform 0.3s, opacity 0.3s;
-        }
-
-        .social-links img:hover {
-            transform: scale(1.2);
-            opacity: 0.8;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Landing Page -->
@@ -125,4 +42,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
