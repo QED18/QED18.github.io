@@ -47,7 +47,7 @@
         .sound-controls {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             z-index: 1;
         }
         .sound-controls button {
@@ -62,12 +62,16 @@
         .sound-controls button:hover {
             background-color: gray;
         }
+        .sound-controls input[type="range"] {
+            margin: 5px;
+            width: 150px;
+        }
     </style>
 </head>
 <body>
     <!-- Background Video -->
     <iframe title="vimeo-player" 
-            src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1&background=1" 
+            src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1" 
             frameborder="0" 
             allow="autoplay; fullscreen" 
             allowfullscreen>
@@ -91,11 +95,11 @@
 
     <!-- Sound Control Buttons -->
     <div class="sound-controls">
-        <button id="mute-toggle">Mute/Unmute</button>
-        <button id="volume-down">Volume -</button>
-        <button id="volume-up">Volume +</button>
+        <button id="mute-toggle">Mute</button>
+        <input id="volume-slider" type="range" min="0" max="100" value="50">
     </div>
 
+    <script src="https://player.vimeo.com/api/player.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
