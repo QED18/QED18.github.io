@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
-        /* General styles */
         body, html {
             margin: 0;
             padding: 0;
             overflow: hidden;
             height: 100%;
-            font-family: Arial, sans-serif;
         }
-
-        /* Landing page styles */
+        /* Landing page */
         #landing-page {
             position: absolute;
             top: 0;
@@ -30,12 +26,6 @@
             align-items: center;
             z-index: 2;
         }
-
-        #landing-page h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
         #landing-page button {
             padding: 15px 30px;
             font-size: 1.2rem;
@@ -45,21 +35,18 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         #landing-page button:hover {
             background-color: darkred;
         }
-
-        /* Main page styles */
+        /* Main page */
         #main-page {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            display: none; /* Hidden initially */
+            display: none;
         }
-
         iframe {
             position: absolute;
             top: 0;
@@ -70,27 +57,23 @@
             z-index: -1;
             border: none;
         }
-
         .content {
             position: relative;
             z-index: 1;
             text-align: center;
             color: white;
         }
-
         .social-links {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-top: 20px;
         }
-
         .social-links img {
             width: 40px;
             height: 40px;
             transition: transform 0.3s, opacity 0.3s;
         }
-
         .social-links img:hover {
             transform: scale(1.2);
             opacity: 0.8;
@@ -106,15 +89,12 @@
 
     <!-- Main Page -->
     <div id="main-page">
-        <!-- Background Video -->
         <iframe title="vimeo-player" 
                 src="https://player.vimeo.com/video/1032854481?h=59f83ff10b&autoplay=1&loop=1&background=1" 
                 frameborder="0" 
                 allow="autoplay; fullscreen" 
                 allowfullscreen>
         </iframe>
-
-        <!-- Content -->
         <div class="content">
             <h1>Welcome to My Website</h1>
             <div class="social-links">
@@ -131,6 +111,7 @@
         </div>
     </div>
 
+    <script src="https://player.vimeo.com/api/player.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
