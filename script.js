@@ -1,3 +1,8 @@
+// Load Particles.js for interactive mouse effects
+particlesJS.load('particles-js', null, function() {
+    console.log('Particles.js loaded successfully!');
+});
+
 // Select the landing page, main page, and start button
 const landingPage = document.getElementById('landing-page');
 const mainPage = document.getElementById('main-page');
