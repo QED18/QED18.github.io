@@ -1,5 +1,6 @@
+
 const body = document.body;
-const heroVideo = document.getElementById("hero-video");
+const heroVideoFrame = document.getElementById("hero-video-frame");
 const soundToggle = document.getElementById("sound-toggle");
 const soundToggleLabel = soundToggle?.querySelector(".sr-only");
 const fullscreenToggle = document.getElementById("fullscreen-toggle");
@@ -28,18 +29,13 @@ let fullscreenTogglePulseTimer = null;
 let siteTitleTypingTimer = null;
 let siteTitleCharacterIndex = 0;
 let siteTitleTypedOnce = false;
-let audioContext = null;
-let mediaSourceNode = null;
-let analyserNode = null;
-let analyserData = null;
-let audioBarsFrame = null;
-let liveAudioBarsReady = false;
+let backgroundAudioEnabled = false;
+let vimeoPlayer = null;
 let lastNowPlayingLevels = [0.34, 0.74, 0.5];
-let initialSoundAttempted = false;
+let soundToggleBusy = false;
 
 const statusMessages = {
-    loading: "Loading background video.",
-    unavailable: "The background video is unavailable right now. Check your hosted video URL.",
+    unavailable: "The background video is unavailable right now. Check the Vimeo embed URL.",
     fullscreenBlocked: "Fullscreen was blocked by the browser. The site still works normally."
 };
 
@@ -48,8 +44,15 @@ function setStatus(message, tone = "info") {
     void tone;
 }
 
-function clamp(value, minimum, maximum) {
-    return Math.min(Math.max(value, minimum), maximum);
+function withTimeout(promise, timeoutMs = 1500) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => {
+            window.setTimeout(() => {
+                reject(new Error("Vimeo request timed out."));
+            }, timeoutMs);
+        })
+    ]);
 }
 
 function setFullscreenButtonUi({ label, pressed, state }) {
@@ -89,6 +92,7 @@ function setSoundButtonUi({ label, pressed, disabled, state }) {
     soundToggle.setAttribute("aria-pressed", String(pressed));
     soundToggle.setAttribute("aria-label", label);
     soundToggle.setAttribute("title", label);
+    soundToggle.setAttribute("aria-busy", String(soundToggleBusy));
     soundToggle.dataset.soundState = state;
 
     if (soundToggleLabel) {
@@ -118,6 +122,7 @@ function setSoundButtonState(enabled) {
 }
 
 function disableSoundButton(label) {
+    soundToggleBusy = false;
     setSoundButtonUi({
         label,
         pressed: false,
@@ -145,170 +150,86 @@ function setNowPlayingBarLevels(levels) {
     });
 }
 
-function stopAudioBarsLoop() {
-    if (audioBarsFrame !== null) {
-        window.cancelAnimationFrame(audioBarsFrame);
-        audioBarsFrame = null;
-    }
-}
-
 function setIdleNowPlayingBars() {
-    stopAudioBarsLoop();
     setNowPlayingMode("idle");
     setNowPlayingBarLevels([0.34, 0.74, 0.5]);
 }
 
-function setFallbackNowPlayingBars() {
-    stopAudioBarsLoop();
+function setMutedNowPlayingBars() {
+    setNowPlayingMode("muted");
+    setNowPlayingBarLevels([0.18, 0.18, 0.18]);
+}
 
-    if (reducedMotionQuery.matches || heroVideo.muted || !hasPlayableVideo) {
-        setIdleNowPlayingBars();
+function setFallbackNowPlayingBars() {
+    if (reducedMotionQuery.matches || !backgroundAudioEnabled || !hasPlayableVideo) {
+        setMutedNowPlayingBars();
         return;
     }
 
     setNowPlayingMode("fallback");
 }
 
-async function tryInitialSoundPlayback() {
-    if (initialSoundAttempted || !hasPlayableVideo || reducedMotionQuery.matches) {
-        return;
-    }
+function applyUiFromMutedState(isMuted) {
+    backgroundAudioEnabled = !isMuted;
+    setSoundButtonState(backgroundAudioEnabled);
 
-    initialSoundAttempted = true;
-    heroVideo.muted = false;
-    heroVideo.defaultMuted = false;
-    setSoundButtonState(true);
-    await enableReactiveAudioBars();
-
-    try {
-        await heroVideo.play();
-    } catch (error) {
-        heroVideo.muted = true;
-        heroVideo.defaultMuted = true;
-        setSoundButtonState(false);
-        setIdleNowPlayingBars();
-
-        heroVideo.play().catch(() => {
-            setStatus(statusMessages.loading, "info");
-        });
-    }
-}
-
-function canUseLiveAudioAnalysis() {
-    const currentSource = heroVideo.currentSrc || heroVideo.getAttribute("src") || "";
-
-    if (!currentSource) {
-        return false;
-    }
-
-    try {
-        return new URL(currentSource, window.location.href).origin === window.location.origin;
-    } catch (error) {
-        return false;
-    }
-}
-
-function sampleFrequencyBand(startIndex, endIndex) {
-    if (!analyserData) {
-        return 0;
-    }
-
-    const safeEnd = Math.min(endIndex, analyserData.length);
-
-    if (startIndex >= safeEnd) {
-        return 0;
-    }
-
-    let sum = 0;
-    let peak = 0;
-
-    for (let index = startIndex; index < safeEnd; index += 1) {
-        const value = analyserData[index] / 255;
-        sum += value;
-        peak = Math.max(peak, value);
-    }
-
-    const average = sum / (safeEnd - startIndex);
-    return Math.min(1, average * 0.78 + peak * 0.5);
-}
-
-function updateReactiveAudioBars() {
-    if (!analyserNode || !analyserData || reducedMotionQuery.matches || heroVideo.muted || heroVideo.paused) {
-        setIdleNowPlayingBars();
-        return;
-    }
-
-    analyserNode.getByteFrequencyData(analyserData);
-
-    const nextLevels = [
-        0.18 + sampleFrequencyBand(0, 5) * 0.82,
-        0.18 + sampleFrequencyBand(5, 14) * 0.82,
-        0.18 + sampleFrequencyBand(14, 28) * 0.82
-    ];
-
-    const easedLevels = lastNowPlayingLevels.map((currentLevel, index) => {
-        const nextLevel = nextLevels[index] ?? currentLevel;
-        return currentLevel + (nextLevel - currentLevel) * 0.35;
-    });
-
-    setNowPlayingMode("reactive");
-    setNowPlayingBarLevels(easedLevels);
-    audioBarsFrame = window.requestAnimationFrame(updateReactiveAudioBars);
-}
-
-function startReactiveAudioBars() {
-    if (reducedMotionQuery.matches || heroVideo.muted || !hasPlayableVideo) {
-        setIdleNowPlayingBars();
-        return;
-    }
-
-    if (!liveAudioBarsReady) {
+    if (backgroundAudioEnabled) {
         setFallbackNowPlayingBars();
         return;
     }
 
-    stopAudioBarsLoop();
-    updateReactiveAudioBars();
+    setMutedNowPlayingBars();
 }
 
-async function enableReactiveAudioBars() {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-
-    if (!AudioContextClass || !canUseLiveAudioAnalysis()) {
-        liveAudioBarsReady = false;
-        setFallbackNowPlayingBars();
+async function playVimeoBackground() {
+    if (!vimeoPlayer) {
         return false;
     }
 
     try {
-        if (!audioContext) {
-            audioContext = new AudioContextClass();
-        }
-
-        if (!mediaSourceNode) {
-            mediaSourceNode = audioContext.createMediaElementSource(heroVideo);
-            analyserNode = audioContext.createAnalyser();
-            analyserNode.fftSize = 128;
-            analyserNode.smoothingTimeConstant = 0.84;
-            analyserData = new Uint8Array(analyserNode.frequencyBinCount);
-
-            // Route the background video's audio through the analyser so the bars can react live.
-            mediaSourceNode.connect(analyserNode);
-            analyserNode.connect(audioContext.destination);
-        }
-
-        if (audioContext.state !== "running") {
-            await audioContext.resume();
-        }
-
-        liveAudioBarsReady = true;
-        startReactiveAudioBars();
+        await withTimeout(vimeoPlayer.play());
         return true;
     } catch (error) {
-        liveAudioBarsReady = false;
-        setFallbackNowPlayingBars();
         return false;
     }
+}
+
+async function pauseVimeoBackground() {
+    if (!vimeoPlayer) {
+        return;
+    }
+
+    try {
+        await withTimeout(vimeoPlayer.pause());
+    } catch (error) {
+        void error;
+    }
+}
+
+async function setVimeoMuted(muted) {
+    if (!vimeoPlayer) {
+        return false;
+    }
+
+    try {
+        await withTimeout(vimeoPlayer.setMuted(muted));
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+async function ensureMutedPlayback() {
+    const mutedSet = await setVimeoMuted(true);
+    const playbackStarted = await playVimeoBackground();
+    applyUiFromMutedState(true);
+    return mutedSet && playbackStarted;
+}
+
+async function ensureAudiblePlayback() {
+    const mutedSet = await setVimeoMuted(false);
+    applyUiFromMutedState(false);
+    return mutedSet;
 }
 
 function finishHeroTitleTyping() {
@@ -408,7 +329,7 @@ function startTypingLoop() {
     renderTypingName();
 }
 
-function applyReducedMotionPreference() {
+async function applyReducedMotionPreference() {
     if (reducedMotionQuery.matches) {
         finishHeroTitleTyping();
     } else if (!siteTitleTypedOnce) {
@@ -424,40 +345,87 @@ function applyReducedMotionPreference() {
         startTypingLoop();
     }
 
-    if (!hasPlayableVideo) {
+    if (!hasPlayableVideo || !vimeoPlayer) {
         return;
     }
 
     if (reducedMotionQuery.matches) {
-        heroVideo.pause();
-        heroVideo.muted = true;
-        heroVideo.defaultMuted = true;
-        heroVideo.currentTime = 0;
+        backgroundAudioEnabled = false;
         disableSoundButton("Sound Disabled");
         setIdleNowPlayingBars();
+        await setVimeoMuted(true);
+        await pauseVimeoBackground();
         return;
     }
 
-    void tryInitialSoundPlayback();
+    const playbackStarted = await playVimeoBackground();
+    applyUiFromMutedState(!backgroundAudioEnabled);
+
+    if (!playbackStarted) {
+        await ensureMutedPlayback();
+        return;
+    }
 }
 
 function markVideoAvailable() {
     hasPlayableVideo = true;
     body.classList.remove("video-unavailable");
-    applyReducedMotionPreference();
 }
 
 function markVideoUnavailable(message) {
     hasPlayableVideo = false;
+    backgroundAudioEnabled = false;
     body.classList.add("video-unavailable");
-    heroVideo.pause();
     disableSoundButton("Video Unavailable");
     setIdleNowPlayingBars();
     setStatus(message, "warning");
 }
 
-function handleVideoError() {
-    markVideoUnavailable(statusMessages.unavailable);
+async function setupVimeoPlayer() {
+    if (!heroVideoFrame || !window.Vimeo?.Player) {
+        markVideoUnavailable(statusMessages.unavailable);
+        return;
+    }
+
+    vimeoPlayer = new window.Vimeo.Player(heroVideoFrame);
+
+    try {
+        await vimeoPlayer.ready();
+        markVideoAvailable();
+        if (reducedMotionQuery.matches) {
+            await applyReducedMotionPreference();
+            return;
+        }
+
+        await ensureMutedPlayback();
+    } catch (error) {
+        markVideoUnavailable(statusMessages.unavailable);
+        return;
+    }
+
+    vimeoPlayer.on("volumechange", (data) => {
+        if (typeof data?.muted === "boolean") {
+            applyUiFromMutedState(data.muted);
+        }
+    });
+
+    vimeoPlayer.on("play", () => {
+        if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
+            setFallbackNowPlayingBars();
+            return;
+        }
+
+        setMutedNowPlayingBars();
+    });
+
+    vimeoPlayer.on("pause", () => {
+        if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
+            setFallbackNowPlayingBars();
+            return;
+        }
+
+        setMutedNowPlayingBars();
+    });
 }
 
 async function attemptFullscreen() {
@@ -490,25 +458,38 @@ async function toggleFullscreen() {
 }
 
 async function toggleSound() {
-    if (!hasPlayableVideo || reducedMotionQuery.matches) {
+    if (soundToggleBusy || !hasPlayableVideo || reducedMotionQuery.matches || !vimeoPlayer) {
         return;
     }
 
-    const shouldEnableSound = heroVideo.muted;
-    heroVideo.muted = !shouldEnableSound;
+    const shouldEnableSound = !backgroundAudioEnabled;
+    soundToggleBusy = true;
+    backgroundAudioEnabled = shouldEnableSound;
     setSoundButtonState(shouldEnableSound);
-    animateSoundToggle();
 
     if (shouldEnableSound) {
-        await enableReactiveAudioBars();
+        setFallbackNowPlayingBars();
     } else {
         setIdleNowPlayingBars();
     }
 
-    heroVideo.play().catch(() => {
-        setIdleNowPlayingBars();
+    animateSoundToggle();
+
+    try {
+        const success = shouldEnableSound
+            ? await ensureAudiblePlayback()
+            : await ensureMutedPlayback();
+
+        if (!success) {
+            throw new Error("Sound toggle failed.");
+        }
+    } catch (error) {
+        applyUiFromMutedState(!shouldEnableSound);
         setStatus("Your browser blocked audio playback. Click the sound button again after interacting with the page.", "warning");
-    });
+    } finally {
+        soundToggleBusy = false;
+        setSoundButtonState(backgroundAudioEnabled);
+    }
 }
 
 async function copyShopCode() {
@@ -547,9 +528,8 @@ async function copyShopCode() {
 }
 
 syncFullscreenButton();
-setStatus(statusMessages.loading, "info");
 disableSoundButton("Loading Audio");
-setIdleNowPlayingBars();
+setMutedNowPlayingBars();
 startHeroTitleTyping();
 startTypingLoop();
 
@@ -557,21 +537,21 @@ soundToggle.addEventListener("click", toggleSound);
 fullscreenToggle.addEventListener("click", toggleFullscreen);
 copyShopCodeButton?.addEventListener("click", copyShopCode);
 document.addEventListener("fullscreenchange", syncFullscreenButton);
-heroVideo.addEventListener("loadeddata", markVideoAvailable);
-heroVideo.addEventListener("error", handleVideoError);
 
 if (typeof reducedMotionQuery.addEventListener === "function") {
-    reducedMotionQuery.addEventListener("change", applyReducedMotionPreference);
+    reducedMotionQuery.addEventListener("change", () => {
+        void applyReducedMotionPreference();
+    });
 } else if (typeof reducedMotionQuery.addListener === "function") {
-    reducedMotionQuery.addListener(applyReducedMotionPreference);
+    reducedMotionQuery.addListener(() => {
+        void applyReducedMotionPreference();
+    });
 }
 
-if (heroVideo.readyState >= 2) {
-    markVideoAvailable();
+if (window.Vimeo?.Player) {
+    void setupVimeoPlayer();
 } else {
-    heroVideo.load();
+    window.addEventListener("load", () => {
+        void setupVimeoPlayer();
+    }, { once: true });
 }
-
-heroVideo.play().catch(() => {
-    setStatus(statusMessages.loading, "info");
-});
