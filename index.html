@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Q1</title>
+    <meta name="description" content="Q1 is a minimal cinematic link hub with a full-screen music video background, a clean alias line, and social links.">
+    <meta name="theme-color" content="#08090d">
+    <meta name="color-scheme" content="dark">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://qed18.github.io/">
+    <link rel="icon" type="image/gif" href="favicon.gif?v=2026.04.17.39">
+    <link rel="shortcut icon" href="favicon.gif?v=2026.04.17.39">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qed18.github.io/">
+    <meta property="og:title" content="Q1">
+    <meta property="og:description" content="A cinematic minimal landing page with a music video background, a clean alias line, and quick social links.">
+    <meta property="og:site_name" content="Q1">
+    <meta property="og:image" content="https://qed18.github.io/social-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Q1 cinematic landing page preview">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Q1">
+    <meta name="twitter:description" content="Minimal, cinematic, and built around a full-screen music video background.">
+    <meta name="twitter:image" content="https://qed18.github.io/social-preview.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2026.04.17.39">
+</head>
+<body>
+    <noscript>
+        <div class="noscript-banner">
+            This page looks best with JavaScript enabled.
+        </div>
+    </noscript>
+
+    <div class="video-scene" aria-hidden="true">
+        <div class="video-embed" style="--video-ratio: 2.6666667; --video-ratio-inverse: 0.375;">
+            <iframe
+                id="hero-video-frame"
+                class="video-iframe"
+                src="https://player.vimeo.com/video/1184188501?autoplay=1&loop=1&controls=0&muted=1&playsinline=1&autopause=0&badge=0&byline=0&portrait=0&title=0"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                title="Q1 intro background video"></iframe>
+        </div>
+        <div class="video-fallback"></div>
+        <div class="video-shade"></div>
+        <div class="video-vignette"></div>
+    </div>
+
+    <main class="experience-shell" id="experience">
+        <header class="utility-bar">
+            <div class="utility-actions">
+                <button id="sound-toggle" class="button button-utility button-icon" type="button" aria-pressed="false" aria-label="Enable sound" title="Enable sound" disabled>
+                    <span class="sr-only">Enable sound</span>
+                    <span class="sound-icon" aria-hidden="true">
+                        <svg class="sound-icon__speaker" viewBox="0 0 24 24" focusable="false">
+                            <path d="M4 10.5a1 1 0 0 1 1-1h3.2l4.1-3.4A1 1 0 0 1 14 6.87v10.26a1 1 0 0 1-1.7.77l-4.1-3.4H5a1 1 0 0 1-1-1z"></path>
+                        </svg>
+                        <svg class="sound-icon__waves" viewBox="0 0 24 24" focusable="false">
+                            <path d="M16.2 8.4a1 1 0 0 1 1.4 0 5.2 5.2 0 0 1 0 7.2 1 1 0 1 1-1.4-1.4 3.2 3.2 0 0 0 0-4.4 1 1 0 0 1 0-1.4z"></path>
+                            <path d="M18.9 5.8a1 1 0 0 1 1.42-.02 8.9 8.9 0 0 1 .02 12.44 1 1 0 0 1-1.44-1.4 6.9 6.9 0 0 0-.01-9.64 1 1 0 0 1 .01-1.4z"></path>
+                        </svg>
+                        <svg class="sound-icon__slash" viewBox="0 0 24 24" focusable="false">
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                    </span>
+                </button>
+                <button id="fullscreen-toggle" class="button button-utility button-icon" type="button" aria-pressed="false" aria-label="Enter fullscreen" title="Enter fullscreen">
+                    <span class="sr-only">Enter fullscreen</span>
+                    <span class="fullscreen-icon" aria-hidden="true">
+                        <svg class="fullscreen-icon__enter" viewBox="0 0 24 24" focusable="false">
+                            <path d="M8 4H4v4"></path>
+                            <path d="M16 4h4v4"></path>
+                            <path d="M20 16v4h-4"></path>
+                            <path d="M8 20H4v-4"></path>
+                            <path d="M9 9 4 4"></path>
+                            <path d="M15 9 20 4"></path>
+                            <path d="M15 15 20 20"></path>
+                            <path d="M9 15 4 20"></path>
+                        </svg>
+                        <svg class="fullscreen-icon__exit" viewBox="0 0 24 24" focusable="false">
+                            <path d="M10 4H4v6"></path>
+                            <path d="M14 4h6v6"></path>
+                            <path d="M20 14v6h-6"></path>
+                            <path d="M10 20H4v-6"></path>
+                            <path d="M9 9 4 9 4 4"></path>
+                            <path d="M15 9 20 9 20 4"></path>
+                            <path d="M15 15 20 15 20 20"></path>
+                            <path d="M9 15 4 15 4 20"></path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+        </header>
+
+        <section class="linktree-panel" aria-labelledby="site-title">
+            <h1 id="site-title" class="hero-title" data-full-text="welcome to my website" aria-label="welcome to my website">
+                <span id="site-title-text"></span>
+                <span id="site-title-cursor" class="title-cursor" aria-hidden="true"></span>
+            </h1>
+            <p class="overline overline-subtitle">Q1</p>
+            <p class="typing-line">
+                <span class="typing-line__label" aria-hidden="true">also known as</span>
+                <span class="typed-wrap" aria-hidden="true">
+                    <span id="typed-name" class="typed-name"></span>
+                    <span class="typing-cursor" aria-hidden="true"></span>
+                </span>
+                <span class="sr-only">Also known as Mo, Moha, Nemo, or AlBARQ.</span>
+            </p>
+            <p class="micro-bio">Mechanical engineer. Tech enthusiast.</p>
+            <section class="now-playing" aria-label="Now playing" data-bars-mode="idle">
+                <div class="now-playing__bars" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="now-playing__copy">
+                    <span class="now-playing__label">Now Playing</span>
+                    <span class="now-playing__track">Tame Impala - End Of Summer</span>
+                </div>
+            </section>
+            <section class="shop-code-card" aria-labelledby="shop-code-title">
+                <div class="shop-code-copy">
+                    <p class="shop-code-kicker">Fortnite Item Shop</p>
+                    <h3 id="shop-code-title" class="shop-code-title">Use creator code Q1</h3>
+                    <p class="shop-code-note">
+                        If you're grabbing something from the shop, drop <strong>Q1</strong> before checkout.
+                    </p>
+                </div>
+                <div class="shop-code-actions">
+                    <span class="shop-code-value" aria-label="Fortnite creator code Q1">Q1</span>
+                    <button id="copy-shop-code" class="button button-code" type="button">
+                        Copy Code
+                    </button>
+                </div>
+            </section>
+            <p id="shop-code-feedback" class="shop-code-feedback" role="status" aria-live="polite"></p>
+
+            <nav class="link-list" aria-label="Social links">
+                <a class="link-card" href="https://instagram.com/q.ed_" target="_blank" rel="noopener noreferrer" aria-label="Visit Q1 on Instagram (opens in a new tab)">
+                    <img src="instagram-logo.png" alt="" width="48" height="48">
+                    <span>Instagram</span>
+                </a>
+                <a class="link-card" href="https://tiktok.com/@qed1" target="_blank" rel="noopener noreferrer" aria-label="Visit Q1 on TikTok (opens in a new tab)">
+                    <img src="tiktok-logo.png" alt="" width="48" height="48">
+                    <span>TikTok</span>
+                </a>
+            </nav>
+
+            <div class="taste-strip" aria-label="Favorite media">
+                <p class="section-label">FAVORITES</p>
+                <div class="taste-group">
+                    <span class="taste-label">Artists</span>
+                    <p class="taste-line">
+                        <a class="taste-link" href="https://www.theweeknd.com/" target="_blank" rel="noopener noreferrer">The Weeknd</a>
+                        <a class="taste-link" href="https://www.tameimpala.com/" target="_blank" rel="noopener noreferrer">Tame Impala</a>
+                    </p>
+                </div>
+                <div class="taste-group">
+                    <span class="taste-label">Shows</span>
+                    <p class="taste-line">
+                        <a class="taste-link" href="https://www.primevideo.com/detail/0L4S6GN5QKGODF5COGHK3Q4D8N" target="_blank" rel="noopener noreferrer">Invincible</a>
+                        <a class="taste-link" href="https://www.primevideo.com/detail/0FVU5GW8977QYZ5QYQ3ONWAMZ6" target="_blank" rel="noopener noreferrer">The Boys</a>
+                        <a class="taste-link" href="https://www.netflix.com/title/80021955" target="_blank" rel="noopener noreferrer">Better Call Saul</a>
+                    </p>
+                </div>
+                <div class="taste-group">
+                    <span class="taste-label">Games</span>
+                    <p class="taste-line">
+                        <a class="taste-link" href="https://overwatch.blizzard.com/en-us/" target="_blank" rel="noopener noreferrer">Overwatch</a>
+                        <a class="taste-link" href="https://www.callofduty.com/" target="_blank" rel="noopener noreferrer">Call of Duty</a>
+                        <a class="taste-link" href="https://www.fortnite.com/" target="_blank" rel="noopener noreferrer">Fortnite</a>
+                    </p>
+                </div>
+                <div class="taste-group">
+                    <span class="taste-label">YT Channels</span>
+                    <p class="taste-line">
+                        <a class="taste-link" href="https://www.youtube.com/@LinusTechTips" target="_blank" rel="noopener noreferrer">LTT</a>
+                        <a class="taste-link" href="https://www.youtube.com/@NetworkChuck" target="_blank" rel="noopener noreferrer">NetworkChuck</a>
+                        <a class="taste-link" href="https://www.youtube.com/@RaeedXA-G" target="_blank" rel="noopener noreferrer">RaeedXA-G</a>
+                        <a class="taste-link" href="https://www.youtube.com/@RealLifeLore" target="_blank" rel="noopener noreferrer">RealLifeLore</a>
+                    </p>
+                </div>
+            </div>
+            <section class="wishlist-strip" aria-label="Wishlist">
+                <p class="section-label">WISHLIST</p>
+                <p class="wishlist-line">
+                    <a class="taste-link wishlist-link" href="https://amzn.eu/d/07O5YoTG" target="_blank" rel="noopener noreferrer">DJI Mini</a>
+                    <a class="taste-link wishlist-link" href="https://link-gulf.com/product/bambu-lab-p1s-ams-2-pro-bundle-with-buffer/" target="_blank" rel="noopener noreferrer">3D Printer</a>
+                    <a class="taste-link wishlist-link" href="https://www.apple.com/ae/shop/buy-mac/mac-mini" target="_blank" rel="noopener noreferrer">Mac mini M4</a>
+                </p>
+            </section>
+        </section>
+    </main>
+
+    <script src="https://player.vimeo.com/api/player.js" defer></script>
+    <script src="script.js?v=2026.04.17.39" defer></script>
+</body>
+</html>
