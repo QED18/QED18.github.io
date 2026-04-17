@@ -9,8 +9,8 @@
     <meta name="color-scheme" content="dark">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://qed18.github.io/">
-    <link rel="icon" type="image/gif" href="favicon.gif?v=2026.04.17.29">
-    <link rel="shortcut icon" href="favicon.gif?v=2026.04.17.29">
+    <link rel="icon" type="image/gif" href="favicon.gif?v=2026.04.17.30">
+    <link rel="shortcut icon" href="favicon.gif?v=2026.04.17.30">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://qed18.github.io/">
@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=2026.04.17.29">
+    <link rel="stylesheet" href="styles.css?v=2026.04.17.31">
 </head>
 <body>
     <noscript>
@@ -40,15 +40,16 @@
     </noscript>
 
     <div class="video-scene" aria-hidden="true">
-        <video
-            id="hero-video"
-            class="hero-video"
-            src="https://www.dropbox.com/scl/fi/qea1nm962v4ky8wmxrtzx/intro.mp4?rlkey=2dwvspzun0lb22ynmd0qmmmnx&st=cbuak4ep&raw=1"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"></video>
+        <div class="video-embed" style="--video-ratio: 2.6666667; --video-ratio-inverse: 0.375;">
+            <iframe
+                id="hero-video-frame"
+                class="video-iframe"
+                src="https://player.vimeo.com/video/1184188501?autoplay=1&loop=1&controls=0&muted=1&playsinline=1&autopause=0&badge=0&byline=0&portrait=0&title=0"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                title="Q1 intro background video"></iframe>
+        </div>
         <div class="video-fallback"></div>
         <div class="video-shade"></div>
         <div class="video-vignette"></div>
@@ -200,6 +201,7 @@
         </section>
     </main>
 
-    <script src="script.js?v=2026.04.17.29" defer></script>
+    <script src="https://player.vimeo.com/api/player.js" defer></script>
+    <script src="script.js?v=2026.04.17.31" defer></script>
 </body>
 </html>
