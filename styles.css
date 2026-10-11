@@ -1710,3 +1710,53 @@ h3 {
 .discord-presence__info strong { font-weight:800; color:var(--text); }
 #discord-activity { color:var(--muted); }
 .discord-presence__detail { color:rgba(245,241,233,.58); font-size:.75rem; }
+
+/* Compact, balanced live-profile strip */
+.profile-live-row {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: .65rem;
+    width: 100%;
+    margin: -.1rem auto .12rem;
+}
+.profile-live-row .discord-presence {
+    display: flex;
+    align-items: center;
+    flex: 0 1 15.5rem;
+    min-width: 0;
+    width: auto;
+    margin: 0;
+    padding: .58rem .8rem;
+    border-radius: 1rem;
+    box-shadow: none;
+    background: rgba(8,9,13,.32);
+}
+.profile-live-row .discord-presence__top,
+.profile-live-row .discord-presence__brand { display: none; }
+.profile-live-row .discord-presence__body { width: 100%; gap: .58rem; }
+.profile-live-row .discord-presence__avatar { width: 2.2rem; height: 2.2rem; }
+.profile-live-row .discord-presence__activity-art { width: 2.1rem; height: 2.1rem; }
+.profile-live-row .discord-presence__info { flex: 1; gap: .14rem; font-size: .77rem; }
+.profile-live-row .discord-presence__identity { display: flex; align-items: center; gap: .45rem; min-width: 0; }
+.profile-live-row .discord-presence__identity strong { overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 0 1 auto; }
+.profile-live-row .discord-presence__status { display: inline-flex; align-items: center; gap: .3rem; min-width: 0; font-size: .65rem; white-space: nowrap; }
+.profile-live-row .discord-presence__dot { width: .43rem; height: .43rem; }
+.profile-live-row #discord-activity { font-size: .72rem; }
+.profile-live-row .now-playing {
+    flex: 0 1 auto;
+    width: auto;
+    margin: 0;
+    padding: .52rem .78rem;
+    border-radius: 1rem;
+    gap: .55rem;
+    background: rgba(8,9,13,.32);
+}
+.profile-live-row .now-playing__track { font-size: .77rem; }
+.profile-live-row .now-playing__label { font-size: .58rem; }
+@media (max-width: 520px) {
+    .profile-live-row { gap: .55rem; }
+    .profile-live-row .discord-presence { flex: 1 1 100%; max-width: 19rem; }
+    .profile-live-row .now-playing { max-width: 100%; }
+}
