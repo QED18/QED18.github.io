@@ -675,30 +675,56 @@ if (document.fonts?.ready) {
 }
 
 
-// A subtle mouse-following light, disabled for touch and reduced-motion visitors.
-if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && !reducedMotionQuery.matches) {
-    const glow = document.createElement("div");
-    glow.className = "mouse-glow";
-    glow.setAttribute("aria-hidden", "true");
-    document.body.appendChild(glow);
-    let x = -300, y = -300, targetX = -300, targetY = -300, frame = 0;
-    const animate = () => {
-        x += (targetX - x) * 0.16;
-        y += (targetY - y) * 0.16;
-        glow.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-        if (Math.abs(targetX-x) > .4 || Math.abs(targetY-y) > .4) frame = requestAnimationFrame(animate);
-        else frame = 0;
+// Custom cursor: one lightweight dot + trailing outline, only on precise pointers.
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const dot = document.createElement("div");
+    const ring = document.createElement("div");
+    dot.className = "custom-cursor-dot";
+    ring.className = "custom-cursor-ring";
+    dot.setAttribute("aria-hidden", "true");
+    ring.setAttribute("aria-hidden", "true");
+    document.body.append(dot, ring);
+    document.documentElement.classList.add("has-custom-cursor");
+    let x = -100, y = -100, rx = -100, ry = -100, raf = 0;
+    let visible = false;
+    const update = () => {
+        rx += (x - rx) * 0.3;
+        ry += (y - ry) * 0.3;
+        ring.style.transform = `translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`;
+        raf = Math.abs(x-rx) + Math.abs(y-ry) > .5 ? requestAnimationFrame(update) : 0;
     };
-    document.addEventListener("pointermove", e => {
-        targetX = e.clientX; targetY = e.clientY;
-        glow.classList.add("mouse-glow--visible");
-        if (!frame) frame = requestAnimationFrame(animate);
+    document.addEventListener("pointermove", (e) => {
+        if (e.pointerType !== "mouse" && e.pointerType !== "pen") return;
+        x = e.clientX; y = e.clientY;
+        dot.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+        if (!visible) {
+            visible = true;
+            dot.classList.add("custom-cursor-visible");
+            ring.classList.add("custom-cursor-visible");
+            rx = x; ry = y;
+        }
+        if (!raf && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) raf = requestAnimationFrame(update);
+        else if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) ring.style.transform = dot.style.transform;
+        const interactive = e.target instanceof Element && Boolean(e.target.closest("a, button, [role=button], select, summary"));
+        ring.classList.toggle("custom-cursor-hover", interactive);
     }, {passive:true});
+    document.addEventListener("pointerdown", () => ring.classList.add("custom-cursor-pressed"), {passive:true});
+    document.addEventListener("pointerup", () => ring.classList.remove("custom-cursor-pressed"), {passive:true});
     document.addEventListener("pointerout", e => {
-        if (!e.relatedTarget) glow.classList.remove("mouse-glow--visible");
+        if (e.relatedTarget) return;
+        visible = false;
+        dot.classList.remove("custom-cursor-visible");
+        ring.classList.remove("custom-cursor-visible");
+        ring.classList.remove("custom-cursor-pressed");
     });
     document.addEventListener("visibilitychange", () => {
-        if (document.hidden) { glow.classList.remove("mouse-glow--visible"); cancelAnimationFrame(frame); frame = 0; }
+        if (document.hidden) {
+            dot.classList.remove("custom-cursor-visible");
+            ring.classList.remove("custom-cursor-visible");
+            visible = false;
+            cancelAnimationFrame(raf);
+            raf = 0;
+        }
     });
 }
 

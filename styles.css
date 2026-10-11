@@ -1831,3 +1831,41 @@ h3 {
     filter: none;
     background: radial-gradient(circle, rgba(243,201,125,.11), rgba(243,201,125,.045) 32%, transparent 72%);
 }
+
+/* Custom pointer, not a background glow. */
+@media (hover: hover) and (pointer: fine) {
+    html.has-custom-cursor, html.has-custom-cursor body,
+    html.has-custom-cursor a, html.has-custom-cursor button,
+    html.has-custom-cursor [role="button"], html.has-custom-cursor summary { cursor: none; }
+    html.has-custom-cursor input, html.has-custom-cursor textarea,
+    html.has-custom-cursor [contenteditable="true"] { cursor: text; }
+    .custom-cursor-dot, .custom-cursor-ring {
+        position: fixed; top: 0; left: 0; z-index: 200;
+        pointer-events: none; opacity: 0; border-radius: 50%;
+        will-change: transform;
+        transition: opacity .14s ease, width .16s ease, height .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .custom-cursor-dot {
+        width: 7px; height: 7px;
+        background: #f3c97d;
+        box-shadow: 0 0 7px rgba(243,201,125,.22);
+    }
+    .custom-cursor-ring {
+        width: 29px; height: 29px;
+        border: 1px solid rgba(243,201,125,.72);
+        background: rgba(243,201,125,.03);
+    }
+    .custom-cursor-visible { opacity: 1; }
+    .custom-cursor-ring.custom-cursor-hover {
+        width: 43px; height: 43px;
+        border-color: rgba(243,201,125,.95);
+        background: rgba(243,201,125,.1);
+    }
+    .custom-cursor-ring.custom-cursor-pressed { width: 20px; height: 20px; }
+}
+@media (hover: none), (pointer: coarse) {
+    .custom-cursor-dot, .custom-cursor-ring { display:none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .custom-cursor-dot, .custom-cursor-ring { transition: none; }
+}
