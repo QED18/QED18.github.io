@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=2026.04.17.39">
+    <link rel="stylesheet" href="styles.css?v=2026.04.17.40">
 </head>
 <body>
     <noscript>
@@ -116,6 +116,21 @@
                 <span class="sr-only">Also known as Mo, Moha, Nemo, or AlBARQ.</span>
             </p>
             <p class="micro-bio">Mechanical engineer. Tech enthusiast.</p>
+            <section class="discord-presence" id="discord-presence" data-discord-user-id="" aria-label="Live Discord presence" hidden>
+                <div class="discord-presence__top">
+                    <span class="discord-presence__brand">DISCORD</span>
+                    <span class="discord-presence__status"><span class="discord-presence__dot"></span><span id="discord-status">Connecting...</span></span>
+                </div>
+                <div class="discord-presence__body">
+                    <img id="discord-avatar" class="discord-presence__avatar" alt="" width="48" height="48" hidden>
+                    <div class="discord-presence__info">
+                        <strong id="discord-name">Discord</strong>
+                        <span id="discord-activity">Checking activity...</span>
+                        <span id="discord-detail" class="discord-presence__detail" hidden></span>
+                    </div>
+                    <img id="discord-activity-image" class="discord-presence__activity-art" alt="" width="46" height="46" hidden>
+                </div>
+            </section>
             <section class="now-playing" aria-label="Now playing" data-bars-mode="idle">
                 <div class="now-playing__bars" aria-hidden="true">
                     <span></span>
@@ -203,5 +218,6 @@
 
     <script src="https://player.vimeo.com/api/player.js" defer></script>
     <script src="script.js?v=2026.04.17.39" defer></script>
+    <script src="discord-presence.js?v=1" defer></script>
 </body>
 </html>
