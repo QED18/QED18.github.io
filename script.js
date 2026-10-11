@@ -501,8 +501,8 @@ async function setupVimeoPlayer() {
             return;
         }
 
-        // Keep the video playing muted behind the entry gate until a user gesture.
-        await ensureMutedPlayback();
+        // Don't decode or play the fullscreen video behind the entry screen.
+        // The visitor's click starts it with sound.
     } catch (error) {
         markVideoUnavailable(statusMessages.unavailable);
         return;
