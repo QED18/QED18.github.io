@@ -1771,3 +1771,23 @@ h3 {
 .profile-live-row a.discord-presence:hover { border-color: rgba(185,183,248,.48); background: rgba(22,22,38,.65); transform: translateY(-1px); }
 .profile-live-row a.discord-presence:focus-visible { outline: 2px solid #b9b7f8; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .profile-live-row a.discord-presence { transition: none; } }
+
+
+/* Motion-sensitive, non-interactive ambient mouse light */
+.mouse-glow {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px; height: 280px;
+    z-index: 4;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle, rgba(243,201,125,.13) 0%, rgba(243,201,125,.055) 34%, transparent 72%);
+    filter: blur(12px);
+    transition: opacity .28s ease;
+    will-change: transform;
+}
+.mouse-glow--visible { opacity: 1; }
+@media (hover:none), (pointer:coarse), (prefers-reduced-motion: reduce) {
+    .mouse-glow { display: none !important; }
+}

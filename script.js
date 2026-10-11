@@ -236,9 +236,16 @@ async function ensureMutedPlayback() {
 }
 
 async function ensureAudiblePlayback() {
-    const mutedSet = await setVimeoMuted(false);
-    applyUiFromMutedState(false);
-    return mutedSet;
+    if (!vimeoPlayer) return false;
+    const unmuted = await setVimeoMuted(false);
+    if (!unmuted) return false;
+    const started = await playVimeoBackground();
+    if (!started) return false;
+    // A policy failure can leave the API reporting a muted player.
+    let stillMuted = true;
+    try { stillMuted = await withTimeout(vimeoPlayer.getMuted()); } catch (_) { return false; }
+    applyUiFromMutedState(stillMuted);
+    return !stillMuted;
 }
 
 function sliceTypedText(text, length) {
@@ -494,7 +501,9 @@ async function setupVimeoPlayer() {
             return;
         }
 
-        await ensureMutedPlayback();
+        // Try unmuted playback, then gracefully keep muted video if blocked.
+        const audible = await ensureAudiblePlayback() && await playVimeoBackground();
+        if (!audible) await ensureMutedPlayback();
     } catch (error) {
         markVideoUnavailable(statusMessages.unavailable);
         return;
@@ -665,3 +674,48 @@ if (document.fonts?.ready) {
         syncHeroTitleHeight();
     });
 }
+
+
+// A subtle mouse-following light, disabled for touch and reduced-motion visitors.
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && !reducedMotionQuery.matches) {
+    const glow = document.createElement("div");
+    glow.className = "mouse-glow";
+    glow.setAttribute("aria-hidden", "true");
+    document.body.appendChild(glow);
+    let x = -300, y = -300, targetX = -300, targetY = -300, frame = 0;
+    const animate = () => {
+        x += (targetX - x) * 0.16;
+        y += (targetY - y) * 0.16;
+        glow.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+        if (Math.abs(targetX-x) > .4 || Math.abs(targetY-y) > .4) frame = requestAnimationFrame(animate);
+        else frame = 0;
+    };
+    document.addEventListener("pointermove", e => {
+        targetX = e.clientX; targetY = e.clientY;
+        glow.classList.add("mouse-glow--visible");
+        if (!frame) frame = requestAnimationFrame(animate);
+    }, {passive:true});
+    document.addEventListener("pointerout", e => {
+        if (!e.relatedTarget) glow.classList.remove("mouse-glow--visible");
+    });
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) { glow.classList.remove("mouse-glow--visible"); cancelAnimationFrame(frame); frame = 0; }
+    });
+}
+
+// Browsers generally require a genuine gesture before playing audible video.
+let audioGestureUsed = false;
+function unlockBackgroundAudio(event) {
+    if (audioGestureUsed || !hasPlayableVideo || !vimeoPlayer || reducedMotionQuery.matches) return;
+    if (event.target instanceof Element && event.target.closest("#sound-toggle")) return;
+    audioGestureUsed = true;
+    if (!backgroundAudioEnabled) {
+        void ensureAudiblePlayback().then(success => {
+            if (!success) void ensureMutedPlayback();
+        });
+    }
+}
+document.addEventListener("pointerdown", unlockBackgroundAudio, {passive:true});
+document.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") unlockBackgroundAudio(event);
+});
