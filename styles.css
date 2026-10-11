@@ -1895,3 +1895,16 @@ h3 {
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
     .star-cursor { display: none !important; }
 }
+
+/* Minimal full-screen click-anywhere entry */
+.entry-screen { cursor: pointer; }
+.entry-screen__inner { pointer-events: none; }
+.entry-screen__monogram { display: none; }
+.entry-screen__prompt {
+    display: block;
+    font: 700 clamp(1.35rem, 3vw, 1.85rem) "Manrope", sans-serif;
+    letter-spacing: -.025em;
+    color: #f5f1e9;
+    text-transform: lowercase;
+}
+.entry-screen:focus-visible { outline: 2px solid var(--accent); outline-offset: -8px; }
