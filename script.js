@@ -839,3 +839,6 @@ entryScreen?.addEventListener("keydown", event => {
         enterSite();
     }
 });
+
+// Suppress the standard right-click context menu on the homepage.
+document.addEventListener("contextmenu", (event) => event.preventDefault());
