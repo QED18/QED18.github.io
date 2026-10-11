@@ -1765,3 +1765,9 @@ h3 {
 .profile-live-row .discord-presence { flex-direction: column; align-items: stretch; gap: .35rem; }
 .profile-live-row .discord-presence__brandline { display: flex; align-items: center; gap: .32rem; color: #b9b7f8; font-weight: 800; font-size: .59rem; letter-spacing: .12em; line-height: 1; }
 .profile-live-row .discord-presence__brandline svg { flex: none; color: #b9b7f8; }
+
+/* Clickable Discord presence profile */
+.profile-live-row a.discord-presence { color: inherit; text-decoration: none; cursor: pointer; transition: border-color .2s ease, background-color .2s ease, transform .2s ease; }
+.profile-live-row a.discord-presence:hover { border-color: rgba(185,183,248,.48); background: rgba(22,22,38,.65); transform: translateY(-1px); }
+.profile-live-row a.discord-presence:focus-visible { outline: 2px solid #b9b7f8; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .profile-live-row a.discord-presence { transition: none; } }
