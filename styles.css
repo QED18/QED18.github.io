@@ -1990,3 +1990,93 @@ h3 {
     border: 0 !important;
     outline: 0 !important;
 }
+
+/* Q1 polish pass: unified hierarchy, quiet glass, consistent video legibility. */
+:root { --q1-glass: rgba(8, 10, 15, .66); --q1-line: rgba(255,255,255,.13); }
+.video-shade {
+    background:
+        linear-gradient(180deg, rgba(3,5,9,.52) 0%, rgba(3,5,9,.31) 35%, rgba(3,5,9,.56) 76%, rgba(3,5,9,.72) 100%),
+        linear-gradient(90deg,rgba(3,5,9,.26),transparent 38%,transparent 62%,rgba(3,5,9,.26));
+}
+.video-vignette { background: radial-gradient(ellipse at 50% 42%, transparent 16%, rgba(0,0,0,.48) 100%); }
+.linktree-panel {
+    max-width: min(100%, 44rem);
+    border: 1px solid rgba(255,255,255,.12);
+    background: linear-gradient(155deg,rgba(12,14,21,.68),rgba(8,10,16,.5));
+    backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px);
+    box-shadow: 0 28px 95px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07);
+}
+.linktree-panel .overline-subtitle {
+    color: #f3c97d;
+    letter-spacing: .26em;
+    text-shadow: 0 0 26px rgba(243,201,125,.17);
+}
+.hero-title { text-wrap: balance; }
+.micro-bio { color: rgba(245,241,233,.82); }
+.profile-live-row { width: 100%; min-width: 0; align-items: stretch; }
+.profile-live-row .now-playing {
+    display: grid;
+    grid-template-columns: 15px minmax(0,1fr) auto;
+    gap: .7rem;
+    align-items: center;
+    flex: 1 1 19rem;
+    width: 100%;
+    max-width: none;
+    padding: .78rem .85rem;
+    background: var(--q1-glass);
+    border: 1px solid var(--q1-line);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.055);
+}
+.profile-live-row .now-playing__copy { overflow: hidden; }
+.profile-live-row .now-playing__label { letter-spacing: .11em; }
+.profile-live-row .now-playing__track {
+    display:block; font-size: .78rem; line-height: 1.5;
+    white-space: nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.profile-live-row .now-playing__counter { font-variant-numeric: tabular-nums; opacity:.85; }
+.profile-live-row .playlist-controls { display:flex; gap:.34rem; align-items:center; flex:0 0 auto; margin:0; }
+.profile-live-row .playlist-control {
+    width: 2.1rem; height:2.1rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: rgba(255,255,255,.055);
+    color:#f5f1e9;
+    transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.profile-live-row .playlist-control:hover { background:rgba(243,201,125,.15); border-color:rgba(243,201,125,.34); transform:translateY(-1px); }
+.profile-live-row .playlist-control:active { transform:translateY(0); }
+.profile-live-row .playlist-control:focus-visible { outline:2px solid var(--accent);outline-offset:3px; }
+.profile-live-row .playlist-control span { display:block; line-height:1; }
+.profile-live-row #playlist-play { background:rgba(243,201,125,.14); border-color:rgba(243,201,125,.16); }
+.profile-live-row .discord-presence { min-width:0; }
+.entry-screen { transition:opacity .55s ease,visibility .55s ease; }
+.entry-screen__prompt { letter-spacing:.02em; text-shadow:0 2px 28px rgba(243,201,125,.16); animation:q1-prompt-in .65s ease both; }
+@keyframes q1-prompt-in { from { opacity:0; transform:translateY(9px); } to { opacity:1;transform:translateY(0); } }
+@media (max-width: 640px) {
+    .experience-shell {
+        padding-top: calc(max(1rem,env(safe-area-inset-top)) + 4.5rem);
+        padding-right:max(.75rem,env(safe-area-inset-right));
+        padding-left:max(.75rem,env(safe-area-inset-left));
+    }
+    .linktree-panel { width:100%; max-width: 100%; border-radius: 22px; }
+    .profile-live-row { flex-direction:column; align-items:stretch; gap:.7rem; }
+    .profile-live-row .now-playing {
+        grid-template-columns: 15px minmax(0,1fr) auto;
+        flex: 0 1 auto;
+        width:100%;
+        max-width:100%;
+    }
+    .profile-live-row .playlist-controls { grid-column:3; margin-top:0; width:auto; justify-content:flex-end; }
+    .profile-live-row .now-playing__track { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; overflow-wrap:normal; }
+    .profile-live-row .discord-presence { width:100%; max-width:100%; }
+}
+@media (max-width: 370px) {
+    .profile-live-row .now-playing { gap:.42rem; padding:.65rem; }
+    .profile-live-row .playlist-controls { gap:.12rem; }
+    .profile-live-row .playlist-control { width:1.9rem;height:1.9rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+    .entry-screen__prompt { animation:none; }
+    .profile-live-row .playlist-control { transition:none; }
+}
