@@ -486,60 +486,51 @@ function markVideoUnavailable(message) {
 }
 
 async function setupVimeoPlayer() {
-    // Dailymotion Web SDK adapter: preserve existing site sound controls.
-    if (!heroVideoFrame || !window.dailymotion?.createPlayer) {
-        markVideoUnavailable("Dailymotion player failed to load.");
+    if (!heroVideoFrame || !window.Vimeo?.Player) {
+        markVideoUnavailable(statusMessages.unavailable);
         return;
     }
+
+    vimeoPlayer = new window.Vimeo.Player(heroVideoFrame);
+
     try {
-        const dm = await window.dailymotion.createPlayer("hero-video-frame", {
-            video: "x9y1dmg",
-            params: {loop: true}
-        });
-        // An adapter keeps the original mute/play/volume UI functions working.
-        vimeoPlayer = {
-            ready: async () => {},
-            play: () => dm.play(),
-            pause: () => dm.pause(),
-            setMuted: muted => dm.setVolume(muted ? 0 : 1),
-            getMuted: async () => {
-                const state = await dm.getState();
-                return state.playerIsMuted || state.playerVolume === 0;
-            },
-            on: (name, cb) => {
-                const events = window.dailymotion.events;
-                const key = {
-                    volumechange: events.PLAYER_VOLUMECHANGE,
-                    play: events.VIDEO_PLAY,
-                    pause: events.VIDEO_PAUSE
-                }[name];
-                if (key) dm.on(key, state => cb(name === "volumechange"
-                    ? {muted: state.playerIsMuted || state.playerVolume === 0} : state));
-            }
-        };
-        if (window.dailymotion.events?.VIDEO_QUALITIESREADY) {
-            dm.on(window.dailymotion.events.VIDEO_QUALITIESREADY, (state) => {
-                if (state.videoQualitiesList?.includes("1080")) {
-                    dm.setQuality("1080");
-                }
-            });
-        }
+        await vimeoPlayer.ready();
         markVideoAvailable();
         if (reducedMotionQuery.matches) {
             await applyReducedMotionPreference();
+            return;
         }
-        vimeoPlayer.on("volumechange", data => {
-            if (typeof data?.muted === "boolean") applyUiFromMutedState(data.muted);
-        });
-        vimeoPlayer.on("play", () => {
-            if (backgroundAudioEnabled && !reducedMotionQuery.matches) setFallbackNowPlayingBars();
-            else setMutedNowPlayingBars();
-        });
-        vimeoPlayer.on("pause", () => setMutedNowPlayingBars());
+
+        // Don't decode or play the fullscreen video behind the entry screen.
+        // The visitor's click starts it with sound.
     } catch (error) {
-        console.warn("Dailymotion background player unavailable:", error);
-        markVideoUnavailable("Dailymotion video could not be embedded.");
+        markVideoUnavailable(statusMessages.unavailable);
+        return;
     }
+
+    vimeoPlayer.on("volumechange", (data) => {
+        if (typeof data?.muted === "boolean") {
+            applyUiFromMutedState(data.muted);
+        }
+    });
+
+    vimeoPlayer.on("play", () => {
+        if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
+            setFallbackNowPlayingBars();
+            return;
+        }
+
+        setMutedNowPlayingBars();
+    });
+
+    vimeoPlayer.on("pause", () => {
+        if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
+            setFallbackNowPlayingBars();
+            return;
+        }
+
+        setMutedNowPlayingBars();
+    });
 }
 
 async function attemptFullscreen() {
@@ -667,7 +658,7 @@ if (typeof reducedMotionQuery.addEventListener === "function") {
     });
 }
 
-if (window.dailymotion?.createPlayer) {
+if (window.Vimeo?.Player) {
     void setupVimeoPlayer();
 } else {
     window.addEventListener("load", () => {
@@ -734,7 +725,7 @@ function enterSite() {
     if (enteredSite) return;
     enteredSite = true;
 
-    // Trigger Dailymotion audio playback from the visitor gesture.
+    // Trigger Vimeo audio playback from the visitor gesture.
     if (vimeoPlayer && !reducedMotionQuery.matches) {
         const unmute = vimeoPlayer.setMuted(false);
         const play = vimeoPlayer.play();
