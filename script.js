@@ -1,5 +1,41 @@
 const body = document.body;
 const heroVideoFrame = document.getElementById("hero-video-frame");
+const videoEmbed = document.getElementById("video-embed");
+let backgroundVideoRatio = 16 / 9;
+let videoResizeFrame = 0;
+function resizeBackgroundVideo() {
+    if (!videoEmbed) return;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    if (!vw || !vh) return;
+    // Cover every edge, even with fractional pixel scaling.
+    const overscan = 1.04;
+    const width = Math.ceil(Math.max(vw, vh * backgroundVideoRatio) * overscan);
+    const height = Math.ceil(width / backgroundVideoRatio);
+    videoEmbed.style.width = width + "px";
+    videoEmbed.style.height = height + "px";
+}
+function scheduleBackgroundResize() {
+    if (videoResizeFrame) return;
+    videoResizeFrame = window.requestAnimationFrame(() => {
+        videoResizeFrame = 0;
+        resizeBackgroundVideo();
+    });
+}
+async function syncVimeoAspectRatio() {
+    if (!vimeoPlayer) return;
+    try {
+        const [width, height] = await Promise.all([
+            withTimeout(vimeoPlayer.getVideoWidth(), 2500),
+            withTimeout(vimeoPlayer.getVideoHeight(), 2500)
+        ]);
+        if (width > 0 && height > 0) backgroundVideoRatio = width / height;
+    } catch (_) { /* Default to 16:9 until Vimeo reports dimensions. */ }
+    scheduleBackgroundResize();
+}
+window.addEventListener("resize", scheduleBackgroundResize, {passive:true});
+window.addEventListener("orientationchange", scheduleBackgroundResize, {passive:true});
+scheduleBackgroundResize();
+
 const soundToggle = document.getElementById("sound-toggle");
 const soundToggleLabel = soundToggle?.querySelector(".sr-only");
 const fullscreenToggle = document.getElementById("fullscreen-toggle");
@@ -35,6 +71,7 @@ async function switchTrack(delta) {
     try {
         const shouldMute = !backgroundAudioEnabled;
         await withTimeout(vimeoPlayer.loadVideo(playlist[next].id), 12000);
+        await syncVimeoAspectRatio();
         currentTrackIndex = next;
         updatePlaylistUi();
         await setVimeoMuted(shouldMute);
@@ -542,6 +579,7 @@ async function setupVimeoPlayer() {
 
     try {
         await vimeoPlayer.ready();
+        await syncVimeoAspectRatio();
         markVideoAvailable();
         if (reducedMotionQuery.matches) {
             await applyReducedMotionPreference();
