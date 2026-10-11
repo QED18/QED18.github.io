@@ -1760,3 +1760,8 @@ h3 {
     .profile-live-row .discord-presence { flex: 1 1 100%; max-width: 19rem; }
     .profile-live-row .now-playing { max-width: 100%; }
 }
+
+/* Compact Discord identity without expanding the profile card */
+.profile-live-row .discord-presence { flex-direction: column; align-items: stretch; gap: .35rem; }
+.profile-live-row .discord-presence__brandline { display: flex; align-items: center; gap: .32rem; color: #b9b7f8; font-weight: 800; font-size: .59rem; letter-spacing: .12em; line-height: 1; }
+.profile-live-row .discord-presence__brandline svg { flex: none; color: #b9b7f8; }
