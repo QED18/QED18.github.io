@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Q1 | YouTube proxy playback test</title>
+<style>
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0e;color:#eee;max-width:850px;margin:auto;padding:28px 16px}h1{font-size:1.5rem}p{color:#bdbdc4;line-height:1.55}
+button{font:inherit;border:1px solid #56505e;border-radius:12px;color:#fff;background:#24212a;padding:11px 14px;cursor:pointer}
+button:hover{border-color:#f3c97d}button:focus-visible{outline:2px solid #f3c97d}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.status{white-space:pre-wrap;background:#191920;border:1px solid #34343b;border-radius:12px;padding:14px;min-height:80px;line-height:1.55}
+video{background:#000;width:100%;aspect-ratio:16/9;object-fit:contain;border-radius:12px}a{color:#f3c97d}
+</style></head><body>
+<h1>Q1 · YouTube playback experiment</h1>
+<p>Video: <a href="https://www.youtube.com/watch?v=iywaBOMvYLI" target="_blank" rel="noopener">iywaBOMvYLI</a>.
+This is an isolated compatibility test, not your live homepage. The services below are unaffiliated third-party proxies and may fail, rate-limit, or restrict playback. Do not rely on them for production.</p>
+<div class="controls"><button id="invidious">Test Invidious</button><button id="piped">Test Piped</button><button id="stop">Stop</button></div>
+<video id="player" controls playsinline preload="none"></video>
+<p id="status" class="status" role="status" aria-live="polite">Choose a service to test. Press play yourself if the browser blocks autoplay.</p>
+<script>
+const id='iywaBOMvYLI', video=document.getElementById('player'), status=document.getElementById('status');
+let controller;
+const inv=['https://inv.nadeko.net','https://invidious.tiekoetter.com'];
+const pip=['https://pipedapi.kavin.rocks','https://pipedapi.moomoo.me'];
+const setStatus=s=>status.textContent=s;
+function reset(){controller?.abort(); controller=new AbortController();video.pause();video.removeAttribute('src');video.load();return controller.signal;}
+async function getJson(url,signal) {const r=await fetch(url,{signal,headers:{accept:'application/json'}});if(!r.ok)throw Error('HTTP '+r.status);return r.json();}
+async function test(kind){
+const signal=reset(), hosts=kind==='Invidious'?inv:pip;let errors=[];
+setStatus('Checking '+kind+' endpoints…');
+for(const host of hosts){
+try {
+const data=await getJson(kind==='Invidious'?host+'/api/v1/videos/'+id:host+'/streams/'+id,signal);
+if(signal.aborted)return;
+if(data.error)throw Error(String(data.error).slice(0,160));
+let sources=[];
+if(kind==='Invidious') {
+sources=(data.formatStreams||[]).filter(s=>s.url&&s.type?.includes('video/mp4')&&(!s.container||s.container==='mp4')).map(s=>({url:s.url,quality:s.qualityLabel||s.quality||'?',mime:s.type||'video/mp4'}));
+} else {
+sources=(data.videoStreams||[]).filter(s=>s.url&&!s.videoOnly&&(/mp4/i.test(s.mimeType||'')||/\.mp4(\?|$)/i.test(s.url))).map(s=>({url:s.url,quality:s.quality||'?',mime:s.mimeType||'video/mp4'}));
+}
+sources.sort((a,b)=>(parseInt(b.quality)||0)-(parseInt(a.quality)||0));
+const playable=sources.find(s=>video.canPlayType(s.mime.split(';')[0]))||sources[0];
+if(!playable)throw Error('No combined video + audio MP4 stream supplied; 1080p often needs separate streams and a media player');
+video.src=playable.url;
+setStatus(kind+' API responded via '+host+'\nTitle: '+(data.title||'Unknown')+'\nProgressive stream selected: '+playable.quality+'\nAvailable progressive qualities: '+sources.map(s=>s.quality).join(', ')+'\nPress Play. API success does not guarantee the video URL works in your browser.');
+try {await video.play();} catch(e) {setStatus(status.textContent+'\nAutoplay blocked or stream rejected: '+e.message);}
+return;
+}catch(e){if(signal.aborted)return;errors.push(host+': '+e.message)}
+}
+setStatus(kind+' did not provide a working playback candidate.\n'+errors.join('\n')+'\nCheck DevTools Network for CORS or server errors.');
+}
+document.getElementById('invidious').onclick=()=>test('Invidious');
+document.getElementById('piped').onclick=()=>test('Piped');
+document.getElementById('stop').onclick=()=>{reset();setStatus('Stopped.')};
+video.addEventListener('error',()=>{if(video.error)setStatus(status.textContent+'\nVideo playback error code: '+video.error.code+' (source may be inaccessible, expired or unsupported)')});
+</script></body></html>
