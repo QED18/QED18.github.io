@@ -720,7 +720,6 @@ if (window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-m
 
 // A dedicated entry action makes the visitor gesture intentional.
 const entryScreen = document.getElementById("entry-screen");
-const entryButton = document.getElementById("entry-button");
 let enteredSite = false;
 function enterSite() {
     if (enteredSite) return;
@@ -745,4 +744,10 @@ function enterSite() {
     entryScreen?.classList.add("entry-screen--dismissed");
     window.setTimeout(() => { if (entryScreen) entryScreen.hidden = true; }, 650);
 }
-entryButton?.addEventListener("click", enterSite);
+entryScreen?.addEventListener("click", enterSite);
+entryScreen?.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        enterSite();
+    }
+});
