@@ -1920,3 +1920,50 @@ h3 {
 .playlist-control {display:grid;place-items:center;width:1.65rem;height:1.65rem;padding:0;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:rgba(255,255,255,.06);color:var(--text);font:700 1.12rem/1 "Manrope",sans-serif;cursor:pointer;transition:background-color .15s,border-color .15s;}
 .playlist-control:hover {background:rgba(243,201,125,.14);border-color:var(--accent);}
 .playlist-control:focus-visible {outline:2px solid var(--accent);outline-offset:2px;}
+
+/* Playlist layout fix: give controls a dedicated stable area and text room */
+.profile-live-row .now-playing {
+    display: grid;
+    grid-template-columns: auto minmax(0,1fr) auto;
+    align-items: center;
+    justify-content: stretch;
+    flex: 1 1 20rem;
+    width: min(100%, 24rem);
+    max-width: 24rem;
+    min-width: 0;
+    padding: .7rem .85rem;
+    gap: .6rem;
+    border-radius: 1rem;
+}
+.profile-live-row .now-playing__bars { grid-column:1; }
+.profile-live-row .now-playing__copy { grid-column:2; min-width:0; max-width:100%; }
+.profile-live-row .now-playing__track {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1.45;
+    font-size: .77rem;
+}
+.profile-live-row .playlist-controls { grid-column:3; flex: none; margin:0; gap:.3rem; }
+.profile-live-row .playlist-control {
+    width: 1.8rem;
+    height: 1.8rem;
+    flex: none;
+    font-size: 1rem;
+}
+.profile-live-row .playlist-control:focus-visible { outline-offset: 2px; }
+@media (max-width: 430px) {
+    .profile-live-row .now-playing {
+        flex: 1 1 100%;
+        max-width: 22rem;
+        grid-template-columns: auto minmax(0,1fr);
+    }
+    .profile-live-row .playlist-controls {
+        grid-column:1 / -1;
+        justify-content:center;
+        width:100%;
+        margin-top:.2rem;
+    }
+    .profile-live-row .now-playing__track { white-space:normal; overflow-wrap:anywhere; }
+}
