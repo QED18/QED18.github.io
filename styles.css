@@ -1908,3 +1908,7 @@ h3 {
     text-transform: lowercase;
 }
 .entry-screen:focus-visible { outline: 2px solid var(--accent); outline-offset: -8px; }
+
+/* Dailymotion widescreen player fills the background cover area */
+.video-iframe iframe, #hero-video-frame iframe { width:100%; height:100%; border:0; }
+#hero-video-frame { overflow:hidden; }
