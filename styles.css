@@ -1816,3 +1816,18 @@ h3 {
     .entry-screen { transition:none; }
     .entry-screen__button { transition:none; }
 }
+
+/* Performance pass: fewer costly compositing layers over the fullscreen video */
+.video-iframe { filter: none; }
+.entry-screen { backdrop-filter: none; -webkit-backdrop-filter: none; background: #08090d; }
+.linktree-panel { backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.now-playing, .profile-live-row .discord-presence, .button-utility {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+.mouse-glow {
+    width: 210px;
+    height: 210px;
+    filter: none;
+    background: radial-gradient(circle, rgba(243,201,125,.11), rgba(243,201,125,.045) 32%, transparent 72%);
+}
