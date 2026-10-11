@@ -2100,3 +2100,32 @@ h3 {
     .profile-live-row .playlist-controls { gap:.08rem; }
     .profile-live-row .playlist-control--sound { min-width:1.9rem; width:1.9rem; height:1.9rem; min-height:1.9rem; }
 }
+
+/* Cohesive Q1 layout finishing pass. */
+.experience-shell { padding-top:max(1.25rem,env(safe-area-inset-top)); padding-bottom:max(1.25rem,env(safe-area-inset-bottom)); }
+.linktree-panel { width:min(100%,38rem); max-width:38rem; gap:1.05rem; padding:clamp(1.2rem,3vw,1.8rem); border-color:rgba(255,255,255,.115); border-radius:24px; }
+.linktree-panel .overline-subtitle { font-size:clamp(1.9rem,4vw,2.3rem); letter-spacing:.2em; }
+.linktree-panel .hero-title { font-size:clamp(2rem,5vw,2.9rem); line-height:1.1; }
+.linktree-panel .micro-bio { line-height:1.65; }
+.profile-live-row { gap:.75rem; }
+.profile-live-row .now-playing { min-width:0; gap:.55rem; }
+.profile-live-row .playlist-controls { min-width:0; }
+.profile-live-row .playlist-control, .profile-live-row .playlist-control--sound { flex-shrink:0; }
+.taste-link { transition:background-color .18s ease,border-color .18s ease,transform .18s ease; }
+.taste-link:hover { transform:translateY(-1px); }
+.linktree-panel a:focus-visible,.linktree-panel button:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+@media(max-width:640px) {
+  .experience-shell { justify-content:flex-start; padding:max(.75rem,env(safe-area-inset-top)) max(.75rem,env(safe-area-inset-right)) max(1.2rem,env(safe-area-inset-bottom)) max(.75rem,env(safe-area-inset-left)); }
+  .linktree-panel { border-radius:20px; padding:clamp(1rem,4vw,1.35rem); gap:.9rem; }
+  .profile-live-row { gap:.65rem; }
+  .profile-live-row .now-playing { gap:.45rem; padding:.7rem; }
+  .profile-live-row .playlist-controls { gap:.13rem; }
+  .profile-live-row .playlist-control,.profile-live-row .playlist-control--sound { width:1.94rem; min-width:1.94rem; height:1.94rem; min-height:1.94rem; }
+}
+@media(max-width:360px) {
+  .profile-live-row .now-playing { grid-template-columns:12px minmax(0,1fr); row-gap:.5rem; }
+  .profile-live-row .now-playing__bars { grid-column:1; }
+  .profile-live-row .now-playing__copy { grid-column:2; }
+  .profile-live-row .playlist-controls { grid-column:1 / -1; justify-content:center; width:100%; }
+}
+@media(prefers-reduced-motion:reduce) { .taste-link { transition:none; } .taste-link:hover { transform:none; } }
