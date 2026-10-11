@@ -48,9 +48,9 @@ const shopCodeFeedback = document.getElementById("shop-code-feedback");
 const nowPlayingElement = document.querySelector(".now-playing");
 const nowPlayingBars = Array.from(document.querySelectorAll(".now-playing__bars span"));
 const playlist = [
+    {id: 1234833242, title: "Drake - 5AM in Toronto"},
     {id: 1032854481, title: "Macklemore - Heroes ft. DJ Premier"},
-    {id: 1184188501, title: "Tame Impala - End Of Summer"},
-    {id: 1234833242, title: "Drake - 5AM in Toronto"}
+    {id: 1184188501, title: "Tame Impala - End Of Summer"}
 ];
 let currentTrackIndex = 0;
 let switchingTrack = false;
