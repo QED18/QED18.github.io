@@ -675,56 +675,46 @@ if (document.fonts?.ready) {
 }
 
 
-// Custom cursor: one lightweight dot + trailing outline, only on precise pointers.
-if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    const dot = document.createElement("div");
-    const ring = document.createElement("div");
-    dot.className = "custom-cursor-dot";
-    ring.className = "custom-cursor-ring";
-    dot.setAttribute("aria-hidden", "true");
-    ring.setAttribute("aria-hidden", "true");
-    document.body.append(dot, ring);
-    document.documentElement.classList.add("has-custom-cursor");
-    let x = -100, y = -100, rx = -100, ry = -100, raf = 0;
-    let visible = false;
-    const update = () => {
-        rx += (x - rx) * 0.3;
-        ry += (y - ry) * 0.3;
-        ring.style.transform = `translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`;
-        raf = Math.abs(x-rx) + Math.abs(y-ry) > .5 ? requestAnimationFrame(update) : 0;
-    };
-    document.addEventListener("pointermove", (e) => {
-        if (e.pointerType !== "mouse" && e.pointerType !== "pen") return;
-        x = e.clientX; y = e.clientY;
-        dot.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
-        if (!visible) {
-            visible = true;
-            dot.classList.add("custom-cursor-visible");
-            ring.classList.add("custom-cursor-visible");
-            rx = x; ry = y;
-        }
-        if (!raf && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) raf = requestAnimationFrame(update);
-        else if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) ring.style.transform = dot.style.transform;
-        const interactive = e.target instanceof Element && Boolean(e.target.closest("a, button, [role=button], select, summary"));
-        ring.classList.toggle("custom-cursor-hover", interactive);
-    }, {passive:true});
-    document.addEventListener("pointerdown", () => ring.classList.add("custom-cursor-pressed"), {passive:true});
-    document.addEventListener("pointerup", () => ring.classList.remove("custom-cursor-pressed"), {passive:true});
-    document.addEventListener("pointerout", e => {
-        if (e.relatedTarget) return;
-        visible = false;
-        dot.classList.remove("custom-cursor-visible");
-        ring.classList.remove("custom-cursor-visible");
-        ring.classList.remove("custom-cursor-pressed");
+// Animated Mario-style spinning star, following the mouse without a continuous render loop.
+if (window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) {
+    const star = document.createElement("img");
+    star.className = "star-cursor";
+    star.alt = "";
+    star.setAttribute("aria-hidden", "true");
+    star.decoding = "async";
+    star.src = "https://media.tenor.com/pXEDrZV2s4QAAAAj/star-spinning.gif";
+    let loaded = false;
+    let pendingFrame = 0;
+    let lastX = -100;
+    let lastY = -100;
+    star.addEventListener("load", () => {
+        loaded = true;
+        document.documentElement.classList.add("has-star-cursor");
+    });
+    star.addEventListener("error", () => {
+        document.documentElement.classList.remove("has-star-cursor");
+        star.remove();
+    });
+    document.body.appendChild(star);
+
+    document.addEventListener("pointermove", (event) => {
+        if (!loaded || event.pointerType !== "mouse") return;
+        lastX = event.clientX;
+        lastY = event.clientY;
+        if (!star.classList.contains("star-cursor--visible")) star.classList.add("star-cursor--visible");
+        const element = event.target;
+        star.classList.toggle("star-cursor--hover", element instanceof Element && Boolean(element.closest("a, button, [role='button'], summary")));
+        if (!pendingFrame) pendingFrame = requestAnimationFrame(() => {
+            star.style.left = lastX + "px";
+            star.style.top = lastY + "px";
+            pendingFrame = 0;
+        });
+    }, {passive: true});
+    document.addEventListener("pointerout", event => {
+        if (!event.relatedTarget) star.classList.remove("star-cursor--visible");
     });
     document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            dot.classList.remove("custom-cursor-visible");
-            ring.classList.remove("custom-cursor-visible");
-            visible = false;
-            cancelAnimationFrame(raf);
-            raf = 0;
-        }
+        if (document.hidden) star.classList.remove("star-cursor--visible");
     });
 }
 
