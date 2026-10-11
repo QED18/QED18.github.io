@@ -602,7 +602,7 @@ async function setupVimeoPlayer() {
     vimeoPlayer.on("ended", () => { void switchTrack(1); });
 
     vimeoPlayer.on("play", () => {
-        if (playlistPlay) { playlistPlay.textContent = "Ⅱ"; playlistPlay.setAttribute("aria-label", "Pause track"); }
+        if (playlistPlay) { playlistPlay.querySelector("span").textContent = "Ⅱ"; playlistPlay.setAttribute("aria-label", "Pause track"); playlistPlay.title = "Pause track"; }
         if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
             setFallbackNowPlayingBars();
             return;
@@ -612,7 +612,7 @@ async function setupVimeoPlayer() {
     });
 
     vimeoPlayer.on("pause", () => {
-        if (playlistPlay) { playlistPlay.textContent = "▶"; playlistPlay.setAttribute("aria-label", "Play track"); }
+        if (playlistPlay) { playlistPlay.querySelector("span").textContent = "▶"; playlistPlay.setAttribute("aria-label", "Play track"); playlistPlay.title = "Play track"; }
         if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
             setFallbackNowPlayingBars();
             return;
