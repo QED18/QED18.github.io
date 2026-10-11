@@ -38,8 +38,6 @@ scheduleBackgroundResize();
 
 const soundToggle = document.getElementById("sound-toggle");
 const soundToggleLabel = soundToggle?.querySelector(".sr-only");
-const fullscreenToggle = document.getElementById("fullscreen-toggle");
-const fullscreenToggleLabel = fullscreenToggle?.querySelector(".sr-only");
 const siteTitle = document.getElementById("site-title");
 const siteTitleText = document.getElementById("site-title-text");
 const typedName = document.getElementById("typed-name");
@@ -116,7 +114,6 @@ let isDeleting = false;
 let typingTimer = null;
 let copyResetTimer = null;
 let soundTogglePulseTimer = null;
-let fullscreenTogglePulseTimer = null;
 let siteTitleTypingTimer = null;
 let siteTitlePhraseIndex = 0;
 let siteTitleCharacterIndex = 0;
@@ -146,38 +143,6 @@ function withTimeout(promise, timeoutMs = 1500) {
             }, timeoutMs);
         })
     ]);
-}
-
-function setFullscreenButtonUi({ label, pressed, state }) {
-    fullscreenToggle.setAttribute("aria-pressed", String(pressed));
-    fullscreenToggle.setAttribute("aria-label", label);
-    fullscreenToggle.setAttribute("title", label);
-    fullscreenToggle.dataset.fullscreenState = state;
-
-    if (fullscreenToggleLabel) {
-        fullscreenToggleLabel.textContent = label;
-    }
-}
-
-function animateFullscreenToggle() {
-    fullscreenToggle.classList.remove("fullscreen-toggle--pulse");
-    window.clearTimeout(fullscreenTogglePulseTimer);
-
-    void fullscreenToggle.offsetWidth;
-
-    fullscreenToggle.classList.add("fullscreen-toggle--pulse");
-    fullscreenTogglePulseTimer = window.setTimeout(() => {
-        fullscreenToggle.classList.remove("fullscreen-toggle--pulse");
-    }, 450);
-}
-
-function syncFullscreenButton() {
-    const isFullscreen = Boolean(document.fullscreenElement);
-    setFullscreenButtonUi({
-        label: isFullscreen ? "Exit fullscreen" : "Enter fullscreen",
-        pressed: isFullscreen,
-        state: isFullscreen ? "exit" : "enter"
-    });
 }
 
 function setSoundButtonUi({ label, pressed, disabled, state }) {
@@ -622,35 +587,6 @@ async function setupVimeoPlayer() {
     });
 }
 
-async function attemptFullscreen() {
-    const target = document.documentElement;
-
-    if (!target.requestFullscreen || document.fullscreenElement) {
-        return;
-    }
-
-    try {
-        await target.requestFullscreen();
-    } catch (error) {
-        setStatus(statusMessages.fullscreenBlocked, "warning");
-    }
-}
-
-async function toggleFullscreen() {
-    animateFullscreenToggle();
-
-    if (document.fullscreenElement) {
-        try {
-            await document.exitFullscreen();
-        } catch (error) {
-            setStatus(statusMessages.fullscreenBlocked, "warning");
-        }
-        return;
-    }
-
-    await attemptFullscreen();
-}
-
 async function toggleSound() {
     if (soundToggleBusy || !hasPlayableVideo || reducedMotionQuery.matches || !vimeoPlayer) {
         return;
@@ -720,8 +656,6 @@ async function copyShopCode() {
         }
     }, 1800);
 }
-
-syncFullscreenButton();
 disableSoundButton("Loading Audio");
 setMutedNowPlayingBars();
 syncHeroTitleHeight();
@@ -729,9 +663,7 @@ startHeroTitleTyping();
 startTypingLoop();
 
 soundToggle.addEventListener("click", toggleSound);
-fullscreenToggle.addEventListener("click", toggleFullscreen);
 copyShopCodeButton?.addEventListener("click", copyShopCode);
-document.addEventListener("fullscreenchange", syncFullscreenButton);
 window.addEventListener("resize", () => {
     window.clearTimeout(heroTitleResizeTimer);
     heroTitleResizeTimer = window.setTimeout(syncHeroTitleHeight, 120);
