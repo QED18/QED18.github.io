@@ -1791,3 +1791,28 @@ h3 {
 @media (hover:none), (pointer:coarse), (prefers-reduced-motion: reduce) {
     .mouse-glow { display: none !important; }
 }
+
+/* Click-to-enter overlay, replacing unreliable audible autoplay */
+.entry-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background: rgba(5,6,10,.9);
+    backdrop-filter: blur(22px);
+    transition: opacity .6s ease, visibility .6s ease;
+}
+.entry-screen[hidden] { display: none; }
+.entry-screen--dismissed { opacity: 0; visibility: hidden; pointer-events: none; }
+.entry-screen__inner { display:flex; flex-direction:column; align-items:center; gap:1.15rem; text-align:center; }
+.entry-screen__monogram { font-family:"DM Serif Display",serif; color:var(--accent); font-size:2.5rem; letter-spacing:.12em; }
+.entry-screen__button { font:700 1.08rem "Manrope",sans-serif; color:var(--text); background:rgba(255,255,255,.055); padding:1rem 1.5rem; border:1px solid rgba(255,255,255,.26); border-radius:999px; cursor:pointer; transition:background .2s,border-color .2s,transform .2s; }
+.entry-screen__button:hover { background:rgba(243,201,125,.12); border-color:var(--accent); transform:translateY(-2px); }
+.entry-screen__button:focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+.entry-screen__hint { color:var(--muted); font-size:.76rem; letter-spacing:.08em; }
+@media (prefers-reduced-motion:reduce) {
+    .entry-screen { transition:none; }
+    .entry-screen__button { transition:none; }
+}

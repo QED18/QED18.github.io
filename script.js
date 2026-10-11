@@ -501,9 +501,8 @@ async function setupVimeoPlayer() {
             return;
         }
 
-        // Try unmuted playback, then gracefully keep muted video if blocked.
-        const audible = await ensureAudiblePlayback() && await playVimeoBackground();
-        if (!audible) await ensureMutedPlayback();
+        // Keep the video playing muted behind the entry gate until a user gesture.
+        await ensureMutedPlayback();
     } catch (error) {
         markVideoUnavailable(statusMessages.unavailable);
         return;
@@ -703,19 +702,31 @@ if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && !reducedM
     });
 }
 
-// Browsers generally require a genuine gesture before playing audible video.
-let audioGestureUsed = false;
-function unlockBackgroundAudio(event) {
-    if (audioGestureUsed || !hasPlayableVideo || !vimeoPlayer || reducedMotionQuery.matches) return;
-    if (event.target instanceof Element && event.target.closest("#sound-toggle")) return;
-    audioGestureUsed = true;
-    if (!backgroundAudioEnabled) {
-        void ensureAudiblePlayback().then(success => {
-            if (!success) void ensureMutedPlayback();
+// A dedicated entry action makes the visitor gesture intentional.
+const entryScreen = document.getElementById("entry-screen");
+const entryButton = document.getElementById("entry-button");
+let enteredSite = false;
+function enterSite() {
+    if (enteredSite) return;
+    enteredSite = true;
+
+    // Issue play and unmute commands synchronously during the click.
+    // An embedded Vimeo player may still be restricted by browser policy.
+    if (vimeoPlayer && !reducedMotionQuery.matches) {
+        const unmute = vimeoPlayer.setMuted(false);
+        const play = vimeoPlayer.play();
+        void Promise.allSettled([unmute, play]).then(async () => {
+            try {
+                const muted = await withTimeout(vimeoPlayer.getMuted());
+                applyUiFromMutedState(muted);
+                if (muted) await ensureMutedPlayback();
+            } catch (_) {
+                await ensureMutedPlayback();
+            }
         });
     }
+
+    entryScreen?.classList.add("entry-screen--dismissed");
+    window.setTimeout(() => { if (entryScreen) entryScreen.hidden = true; }, 650);
 }
-document.addEventListener("pointerdown", unlockBackgroundAudio, {passive:true});
-document.addEventListener("keydown", event => {
-    if (event.key === "Enter" || event.key === " ") unlockBackgroundAudio(event);
-});
+entryButton?.addEventListener("click", enterSite);
