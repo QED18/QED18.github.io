@@ -1679,3 +1679,34 @@ h3 {
         transform: scaleY(var(--bar-scale, 0.75));
     }
 }
+
+
+/* Live Discord card */
+.discord-presence {
+    width: min(100%, 25rem);
+    margin: 0 auto;
+    padding: .9rem 1rem;
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 1.15rem;
+    background: rgba(8,9,13,.48);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 12px 35px rgba(0,0,0,.14);
+}
+.discord-presence[hidden], .discord-presence img[hidden], .discord-presence__detail[hidden] { display: none !important; }
+.discord-presence__top, .discord-presence__body, .discord-presence__status { display:flex; align-items:center; }
+.discord-presence__top { justify-content:space-between; gap:1rem; margin-bottom:.75rem; }
+.discord-presence__brand { font-size:.67rem; letter-spacing:.16em; font-weight:800; color:var(--muted); }
+.discord-presence__status { gap:.4rem; font-size:.75rem; color:var(--muted); }
+.discord-presence__dot { width:.52rem; height:.52rem; flex:none; border-radius:50%; background:#747f8d; box-shadow:0 0 0 3px rgba(255,255,255,.05); }
+.discord-presence[data-status="online"] .discord-presence__dot { background:#43b581; }
+.discord-presence[data-status="idle"] .discord-presence__dot { background:#faa61a; }
+.discord-presence[data-status="dnd"] .discord-presence__dot { background:#f04747; }
+.discord-presence__body { gap:.8rem; min-width:0; }
+.discord-presence__avatar, .discord-presence__activity-art { width:3rem; height:3rem; flex:none; border-radius:.75rem; object-fit:cover; }
+.discord-presence__avatar { border-radius:50%; }
+.discord-presence__activity-art { margin-left:auto; }
+.discord-presence__info { display:flex; flex-direction:column; gap:.15rem; min-width:0; font-size:.83rem; }
+.discord-presence__info > * { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.discord-presence__info strong { font-weight:800; color:var(--text); }
+#discord-activity { color:var(--muted); }
+.discord-presence__detail { color:rgba(245,241,233,.58); font-size:.75rem; }
