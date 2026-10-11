@@ -11,6 +11,52 @@ const copyShopCodeButton = document.getElementById("copy-shop-code");
 const shopCodeFeedback = document.getElementById("shop-code-feedback");
 const nowPlayingElement = document.querySelector(".now-playing");
 const nowPlayingBars = Array.from(document.querySelectorAll(".now-playing__bars span"));
+const playlist = [
+    {id: 1032854481, title: "Macklemore - Heroes ft. DJ Premier"},
+    {id: 1184188501, title: "Tame Impala - End Of Summer"}
+];
+let currentTrackIndex = 0;
+let switchingTrack = false;
+const playlistTrackLabel = document.querySelector(".now-playing__track");
+const playlistCounter = document.getElementById("playlist-counter");
+const playlistPrev = document.getElementById("playlist-prev");
+const playlistNext = document.getElementById("playlist-next");
+const playlistPlay = document.getElementById("playlist-play");
+function updatePlaylistUi() {
+    if (playlistTrackLabel) playlistTrackLabel.textContent = playlist[currentTrackIndex].title;
+    if (playlistCounter) playlistCounter.textContent = `${currentTrackIndex+1} / ${playlist.length}`;
+}
+async function switchTrack(delta) {
+    if (!vimeoPlayer || switchingTrack || !enteredSite) return;
+    switchingTrack = true;
+    const previous = currentTrackIndex;
+    const next = (currentTrackIndex + delta + playlist.length) % playlist.length;
+    try {
+        const shouldMute = !backgroundAudioEnabled;
+        await withTimeout(vimeoPlayer.loadVideo(playlist[next].id), 12000);
+        currentTrackIndex = next;
+        updatePlaylistUi();
+        await setVimeoMuted(shouldMute);
+        await playVimeoBackground();
+    } catch (error) {
+        currentTrackIndex = previous;
+        updatePlaylistUi();
+        console.warn("Unable to switch Vimeo track", error);
+    } finally {
+        switchingTrack = false;
+    }
+}
+playlistPrev?.addEventListener("click", () => void switchTrack(-1));
+playlistNext?.addEventListener("click", () => void switchTrack(1));
+playlistPlay?.addEventListener("click", async () => {
+    if (!vimeoPlayer || !enteredSite) return;
+    try {
+        const paused = await withTimeout(vimeoPlayer.getPaused());
+        if (paused) await playVimeoBackground();
+        else await pauseVimeoBackground();
+    } catch (_) {}
+});
+
 
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const siteTitlePhrases = [
@@ -514,7 +560,10 @@ async function setupVimeoPlayer() {
         }
     });
 
+    vimeoPlayer.on("ended", () => { void switchTrack(1); });
+
     vimeoPlayer.on("play", () => {
+        if (playlistPlay) { playlistPlay.textContent = "Ⅱ"; playlistPlay.setAttribute("aria-label", "Pause track"); }
         if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
             setFallbackNowPlayingBars();
             return;
@@ -524,6 +573,7 @@ async function setupVimeoPlayer() {
     });
 
     vimeoPlayer.on("pause", () => {
+        if (playlistPlay) { playlistPlay.textContent = "▶"; playlistPlay.setAttribute("aria-label", "Play track"); }
         if (backgroundAudioEnabled && !reducedMotionQuery.matches) {
             setFallbackNowPlayingBars();
             return;
