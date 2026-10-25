@@ -843,3 +843,36 @@ entryScreen?.addEventListener("keydown", event => {
 
 // Suppress the standard right-click context menu on the homepage.
 document.addEventListener("contextmenu", (event) => event.preventDefault());
+
+/* Smooth Favorites disclosure: keep native details behavior as fallback. */
+const favoritesDetails = document.querySelector(".taste-accordion");
+const favoritesSummary = favoritesDetails?.querySelector("summary");
+if (favoritesDetails && favoritesSummary && typeof favoritesDetails.animate === "function") {
+    let disclosureAnimation = null;
+    let disclosureRun = 0;
+    favoritesSummary.addEventListener("click", async (event) => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        event.preventDefault();
+        const run = ++disclosureRun;
+        if (disclosureAnimation) disclosureAnimation.cancel();
+        const currentHeight = favoritesDetails.getBoundingClientRect().height;
+        const expanding = !favoritesDetails.dataset.closing && !favoritesDetails.open;
+        const shouldExpand = favoritesDetails.dataset.closing === "true" || expanding;
+        favoritesDetails.open = true;
+        favoritesDetails.dataset.closing = shouldExpand ? "false" : "true";
+        const targetHeight = shouldExpand
+            ? favoritesDetails.scrollHeight
+            : favoritesSummary.getBoundingClientRect().height + parseFloat(getComputedStyle(favoritesDetails).paddingTop || 0) + parseFloat(getComputedStyle(favoritesDetails).borderTopWidth || 0);
+        favoritesDetails.style.overflow = "hidden";
+        disclosureAnimation = favoritesDetails.animate(
+            [{height: currentHeight + "px"}, {height: targetHeight + "px"}],
+            {duration: 260, easing:"cubic-bezier(.22,1,.36,1)"}
+        );
+        try { await disclosureAnimation.finished; } catch (_) { return; }
+        if (run !== disclosureRun) return;
+        if (!shouldExpand) favoritesDetails.open = false;
+        favoritesDetails.style.overflow = "";
+        delete favoritesDetails.dataset.closing;
+        disclosureAnimation = null;
+    });
+}
