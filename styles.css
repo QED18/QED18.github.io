@@ -2208,3 +2208,9 @@ h3 {
 }
 .taste-accordion > .taste-group + .taste-group { margin-top:.75rem; }
 @media(prefers-reduced-motion:reduce) { .taste-accordion__chevron {transition:none;} }
+
+/* Smooth disclosure while preserving the minimalist section look. */
+.taste-accordion { overflow:visible; }
+.taste-accordion[open] > .taste-group { animation:favorites-reveal .26s ease both; }
+@keyframes favorites-reveal { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+@media(prefers-reduced-motion:reduce) { .taste-accordion[open] > .taste-group {animation:none;} }
