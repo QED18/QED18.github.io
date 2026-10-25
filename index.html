@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Serif+Display:ital@0;1&family=Reem+Kufi:wght@600;700;800;900&family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=kufi-20261025">
+    <link rel="stylesheet" href="styles.css?v=favorites-collapse-20261026">
 </head>
 <body>
     <div class="entry-screen" id="entry-screen" role="button" tabindex="0" aria-label="Click anywhere to enter website">
@@ -182,8 +182,8 @@
                 </a>
             </nav>
 
-            <div class="taste-strip" aria-label="Favorite media">
-                <p class="section-label">FAVORITES</p>
+            <details class="taste-strip taste-accordion" aria-label="Favorite media">
+                <summary class="section-label taste-accordion__summary"><span>FAVORITES</span><span class="taste-accordion__hint">Expand <span class="taste-accordion__chevron" aria-hidden="true">⌄</span></span></summary>
                 <div class="taste-group">
                     <span class="taste-label">Artists</span>
                     <p class="taste-line">
@@ -222,7 +222,7 @@
                         <a class="taste-link" href="https://www.youtube.com/@fern-tv" target="_blank" rel="noopener noreferrer">fern</a>
                     </p>
                 </div>
-            </div>
+            </details>
         </section>
     </main>
 
