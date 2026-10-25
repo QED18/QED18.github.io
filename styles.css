@@ -2358,3 +2358,28 @@ h3 {
     color:#f3c97d;
     text-shadow:0 2px 18px rgba(243,201,125,.17);
 }
+
+/* Anchor the dancer to the top edge of the entire profile widget. */
+.q1-widget-shell {
+    position:relative;
+    display:block;
+    width:min(100%,38rem);
+    margin-inline:auto;
+    isolation:isolate;
+}
+.q1-widget-shell > .linktree-panel { width:100%; max-width:100%; position:relative; overflow:visible; }
+.q1-widget-shell > .q1-top-dancer {
+    position:absolute;
+    top:0;
+    left:50%;
+    width:clamp(76px,9vw,102px);
+    height:auto;
+    margin:0;
+    transform:translate(-50%,-90%);
+    z-index:5;
+    pointer-events:none;
+}
+@media(max-width:640px) {
+    .q1-widget-shell { width:100%; }
+    .q1-widget-shell > .q1-top-dancer {width:82px;transform:translate(-50%,-90%);}
+}
