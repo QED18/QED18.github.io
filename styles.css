@@ -2116,3 +2116,18 @@ h3 {
         cursor: text !important;
     }
 }
+
+/* Arabic welcome phrase: graceful calligraphic serif without changing other languages. */
+.hero-title[data-title-lang="ar"] {
+    font-family: "Amiri", "Times New Roman", serif;
+    font-weight: 700;
+    line-height: 1.55;
+    letter-spacing: 0;
+    font-size: clamp(2rem, 4.5vw, 3.1rem);
+    direction: rtl;
+}
+.hero-title[data-title-lang="ar"] #site-title-text {
+    font-family: inherit;
+    line-height: inherit;
+    letter-spacing: normal;
+}
