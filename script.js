@@ -48,6 +48,7 @@ const shopCodeFeedback = document.getElementById("shop-code-feedback");
 const nowPlayingElement = document.querySelector(".now-playing");
 const nowPlayingBars = Array.from(document.querySelectorAll(".now-playing__bars span"));
 const playlist = [
+    {id: 1239290183, title: "Vimeo video"},
     {id: 1234838421, title: "The Weeknd - Out of Time"},
     {id: 1234833242, title: "Drake - 5AM in Toronto"},
     {id: 1184188501, title: "Tame Impala - End Of Summer"}
@@ -63,6 +64,17 @@ function updatePlaylistUi() {
     if (playlistTrackLabel) playlistTrackLabel.textContent = playlist[currentTrackIndex].title;
     if (playlistCounter) playlistCounter.textContent = `${currentTrackIndex+1} / ${playlist.length}`;
 }
+async function syncCurrentTrackTitle() {
+    if (!vimeoPlayer) return;
+    const expectedIndex = currentTrackIndex;
+    try {
+        const title = await withTimeout(vimeoPlayer.getVideoTitle(), 3000);
+        if (expectedIndex === currentTrackIndex && typeof title === "string" && title.trim()) {
+            playlist[expectedIndex].title = title.trim();
+            updatePlaylistUi();
+        }
+    } catch (_) { /* Preserve existing title if metadata is unavailable. */ }
+}
 async function switchTrack(delta) {
     if (!vimeoPlayer || switchingTrack || !enteredSite) return;
     switchingTrack = true;
@@ -74,6 +86,7 @@ async function switchTrack(delta) {
         await syncVimeoAspectRatio();
         currentTrackIndex = next;
         updatePlaylistUi();
+        void syncCurrentTrackTitle();
         await setVimeoMuted(shouldMute);
         await playVimeoBackground();
     } catch (error) {
@@ -581,6 +594,7 @@ async function setupVimeoPlayer() {
         await vimeoPlayer.ready();
         await syncVimeoAspectRatio();
         markVideoAvailable();
+        void syncCurrentTrackTitle();
         if (reducedMotionQuery.matches) {
             await applyReducedMotionPreference();
             return;
