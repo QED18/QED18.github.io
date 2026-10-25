@@ -2134,3 +2134,25 @@ h3 {
 
 .hero-title[data-title-lang="ar"] { font-family:"Reem Kufi",sans-serif; font-weight:900; line-height:1.35; letter-spacing:0; font-size:clamp(1.85rem,4.4vw,2.8rem); }
 .hero-title[data-title-lang="ar"] #site-title-text { font-family:inherit; font-weight:inherit; }
+
+/* Native, keyboard-accessible collapsible favorites panel. */
+.taste-accordion { width:100%; }
+.taste-accordion__summary {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1rem; width:100%; padding:.88rem 1rem;
+    border:1px solid rgba(255,255,255,.14); border-radius:14px;
+    background:rgba(10,12,18,.57);
+    cursor:pointer; list-style:none; user-select:none;
+    transition:border-color .18s ease,background-color .18s ease;
+}
+.taste-accordion__summary::-webkit-details-marker { display:none; }
+.taste-accordion__summary::marker { content:""; }
+.taste-accordion__summary:hover { border-color:rgba(243,201,125,.35);background:rgba(22,22,26,.75); }
+.taste-accordion__summary:focus-visible { outline:2px solid var(--accent);outline-offset:3px; }
+.taste-accordion__hint { font-size:.68rem; font-weight:600; letter-spacing:.02em; text-transform:none; color:rgba(245,241,233,.64); display:flex;align-items:center;gap:.55rem; }
+.taste-accordion__chevron { font-size:1.15rem; display:inline-block;transition:transform .18s ease; }
+.taste-accordion[open] .taste-accordion__chevron { transform:rotate(180deg); }
+.taste-accordion[open] .taste-accordion__summary { margin-bottom:1rem; }
+.taste-accordion[open] .taste-accordion__hint { font-size:0; }
+.taste-accordion[open] .taste-accordion__hint::before { content:"Collapse";font-size:.68rem; }
+@media(prefers-reduced-motion:reduce) { .taste-accordion__summary,.taste-accordion__chevron {transition:none;} }
