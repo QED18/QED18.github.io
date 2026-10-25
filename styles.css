@@ -2347,3 +2347,14 @@ h3 {
     background:linear-gradient(150deg,rgba(38,142,227,.35),rgba(17,63,117,.35));
     box-shadow:0 0 24px rgba(30,135,245,.12);
 }
+
+/* Medieval blackletter treatment for the Q1 brand title only. */
+.linktree-panel .overline.overline-subtitle {
+    font-family:"UnifrakturCook", "Georgia", serif;
+    font-weight:700;
+    font-size:clamp(2.15rem,4.3vw,3.1rem);
+    letter-spacing:.02em;
+    line-height:1.15;
+    color:#f3c97d;
+    text-shadow:0 2px 18px rgba(243,201,125,.17);
+}
