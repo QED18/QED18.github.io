@@ -64,17 +64,6 @@ function updatePlaylistUi() {
     if (playlistTrackLabel) playlistTrackLabel.textContent = playlist[currentTrackIndex].title;
     if (playlistCounter) playlistCounter.textContent = `${currentTrackIndex+1} / ${playlist.length}`;
 }
-async function syncCurrentTrackTitle() {
-    if (!vimeoPlayer) return;
-    const expectedIndex = currentTrackIndex;
-    try {
-        const title = await withTimeout(vimeoPlayer.getVideoTitle(), 3000);
-        if (expectedIndex === currentTrackIndex && playlist[expectedIndex].id !== 1239290183 && typeof title === "string" && title.trim()) {
-            playlist[expectedIndex].title = title.trim();
-            updatePlaylistUi();
-        }
-    } catch (_) { /* Preserve existing title if metadata is unavailable. */ }
-}
 async function switchTrack(delta) {
     if (!vimeoPlayer || switchingTrack || !enteredSite) return;
     switchingTrack = true;
@@ -86,7 +75,6 @@ async function switchTrack(delta) {
         await syncVimeoAspectRatio();
         currentTrackIndex = next;
         updatePlaylistUi();
-        void syncCurrentTrackTitle();
         await setVimeoMuted(shouldMute);
         await playVimeoBackground();
     } catch (error) {
@@ -594,7 +582,6 @@ async function setupVimeoPlayer() {
         await vimeoPlayer.ready();
         await syncVimeoAspectRatio();
         markVideoAvailable();
-        void syncCurrentTrackTitle();
         if (reducedMotionQuery.matches) {
             await applyReducedMotionPreference();
             return;
