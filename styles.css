@@ -2156,3 +2156,55 @@ h3 {
 .taste-accordion[open] .taste-accordion__hint { font-size:0; }
 .taste-accordion[open] .taste-accordion__hint::before { content:"Collapse";font-size:.68rem; }
 @media(prefers-reduced-motion:reduce) { .taste-accordion__summary,.taste-accordion__chevron {transition:none;} }
+
+/* Favorites is a quiet full-width section heading, not a floating button. */
+.taste-strip.taste-accordion {
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    justify-items:stretch;
+    gap:0;
+    width:100%;
+    padding-top:.65rem;
+    border-top:1px solid rgba(255,255,255,.09);
+}
+.taste-accordion > .taste-accordion__summary {
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    min-height:2.9rem;
+    margin:0;
+    padding:.55rem .15rem;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    text-align:left;
+    color:rgba(245,241,233,.75);
+    font-size:.78rem;
+    letter-spacing:.16em;
+}
+.taste-accordion > .taste-accordion__summary:hover {
+    background:transparent;
+    border:0;
+    color:var(--accent);
+}
+.taste-accordion > .taste-accordion__summary:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:5px; }
+.taste-accordion__chevron {
+    width:.52rem;height:.52rem;
+    flex:0 0 auto;
+    border-right:1.6px solid currentColor;
+    border-bottom:1.6px solid currentColor;
+    transform:rotate(45deg);
+    transition:transform .2s ease;
+    margin-right:.45rem;
+    opacity:.7;
+}
+.taste-accordion[open] .taste-accordion__chevron { transform:rotate(225deg); }
+.taste-accordion[open] > .taste-accordion__summary {
+    margin:0 0 .8rem;
+    border-bottom:1px solid rgba(255,255,255,.09);
+}
+.taste-accordion > .taste-group + .taste-group { margin-top:.75rem; }
+@media(prefers-reduced-motion:reduce) { .taste-accordion__chevron {transition:none;} }
