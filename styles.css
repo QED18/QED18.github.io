@@ -2100,3 +2100,19 @@ h3 {
     .profile-live-row .playlist-controls { gap:.08rem; }
     .profile-live-row .playlist-control--sound { min-width:1.9rem; width:1.9rem; height:1.9rem; min-height:1.9rem; }
 }
+
+/* Keep the native cursor hidden over nested Discord/card elements while the star is active. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    html.has-star-cursor,
+    html.has-star-cursor body,
+    html.has-star-cursor body *,
+    html.has-star-cursor body *::before,
+    html.has-star-cursor body *::after {
+        cursor: none !important;
+    }
+    html.has-star-cursor input,
+    html.has-star-cursor textarea,
+    html.has-star-cursor [contenteditable="true"] {
+        cursor: text !important;
+    }
+}
