@@ -43,8 +43,6 @@ const fullscreenToggleLabel = fullscreenToggle?.querySelector(".sr-only");
 const siteTitle = document.getElementById("site-title");
 const siteTitleText = document.getElementById("site-title-text");
 const typedName = document.getElementById("typed-name");
-const copyShopCodeButton = document.getElementById("copy-shop-code");
-const shopCodeFeedback = document.getElementById("shop-code-feedback");
 const nowPlayingElement = document.querySelector(".now-playing");
 const nowPlayingBars = Array.from(document.querySelectorAll(".now-playing__bars span"));
 const playlist = [
@@ -108,14 +106,12 @@ const siteTitlePhrases = [
     { text: "내 웹사이트에 오신 것을 환영합니다", lang: "ko" }
 ];
 const nicknames = ["Mo", "Moha", "Nemo", "AlBARQ"];
-const fortniteShopCode = "Q1";
 
 let hasPlayableVideo = false;
 let typingIndex = 0;
 let characterIndex = 0;
 let isDeleting = false;
 let typingTimer = null;
-let copyResetTimer = null;
 let soundTogglePulseTimer = null;
 let fullscreenTogglePulseTimer = null;
 let siteTitleTypingTimer = null;
@@ -687,41 +683,6 @@ async function toggleSound() {
     }
 }
 
-async function copyShopCode() {
-    if (!copyShopCodeButton) {
-        return;
-    }
-
-    try {
-        if (navigator.clipboard?.writeText) {
-            await navigator.clipboard.writeText(fortniteShopCode);
-        } else {
-            throw new Error("Clipboard API unavailable");
-        }
-
-        copyShopCodeButton.textContent = "Copied Q1";
-
-        if (shopCodeFeedback) {
-            shopCodeFeedback.textContent = "Creator code Q1 copied.";
-        }
-    } catch (error) {
-        copyShopCodeButton.textContent = "Use Q1";
-
-        if (shopCodeFeedback) {
-            shopCodeFeedback.textContent = "Copy failed. Just type Q1 manually in the Fortnite Item Shop.";
-        }
-    }
-
-    window.clearTimeout(copyResetTimer);
-    copyResetTimer = window.setTimeout(() => {
-        copyShopCodeButton.textContent = "Copy Code";
-
-        if (shopCodeFeedback) {
-            shopCodeFeedback.textContent = "";
-        }
-    }, 1800);
-}
-
 syncFullscreenButton();
 disableSoundButton("Loading Audio");
 setMutedNowPlayingBars();
@@ -731,7 +692,6 @@ startTypingLoop();
 
 soundToggle.addEventListener("click", toggleSound);
 fullscreenToggle.addEventListener("click", toggleFullscreen);
-copyShopCodeButton?.addEventListener("click", copyShopCode);
 document.addEventListener("fullscreenchange", syncFullscreenButton);
 window.addEventListener("resize", () => {
     window.clearTimeout(heroTitleResizeTimer);
