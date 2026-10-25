@@ -2262,3 +2262,17 @@ h3 {
 .link-list .link-card:hover .social-link-arrow { color:var(--accent); transform:translate(2px,-2px); }
 @media(max-width:340px) { .link-list {grid-template-columns:1fr;} }
 @media(prefers-reduced-motion:reduce) { .link-list .link-card,.link-list .social-link-arrow {transition:none;} }
+
+/* Animated character centered above the Q1 profile widget. */
+.q1-top-dancer {
+    display:block;
+    align-self:center;
+    width:clamp(78px,10vw,112px);
+    height:auto;
+    max-width:100%;
+    object-fit:contain;
+    margin:0 auto .5rem;
+    pointer-events:none;
+    filter:drop-shadow(0 8px 16px rgba(0,0,0,.32));
+}
+@media(max-width:640px) { .q1-top-dancer { width:88px; margin-bottom:.35rem; } }
