@@ -2332,3 +2332,18 @@ h3 {
   .linktree-panel .shop-code-card { padding:.82rem .9rem;gap:.65rem; }
   .linktree-panel .shop-code-mark { width:2.65rem;height:2.65rem;font-size:1rem; }
 }
+
+/* Fortnite blue identity, with a single visible creator code. */
+.linktree-panel .shop-code-card {
+    border:1px solid rgba(79,184,255,.32);
+    background:linear-gradient(115deg,rgba(15,33,53,.76),rgba(10,17,30,.64));
+    box-shadow:inset 0 1px 0 rgba(126,207,255,.08);
+}
+.linktree-panel .shop-code-kicker { color:#77caff; }
+.linktree-panel .shop-code-title { color:#f1f7ff; }
+.linktree-panel .shop-code-mark {
+    color:#e9f8ff;
+    border:1px solid rgba(96,195,255,.42);
+    background:linear-gradient(150deg,rgba(38,142,227,.35),rgba(17,63,117,.35));
+    box-shadow:0 0 24px rgba(30,135,245,.12);
+}
