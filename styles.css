@@ -2417,3 +2417,7 @@ h3 {
     border-right:0;
     border-left:2px solid var(--accent);
 }
+
+/* Slightly larger dancing character, still anchored to the card edge. */
+.q1-widget-shell > .q1-top-dancer { width:clamp(92px,11vw,124px); }
+@media(max-width:640px) { .q1-widget-shell > .q1-top-dancer { width:100px; } }
