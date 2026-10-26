@@ -98,7 +98,7 @@ playlistPlay?.addEventListener("click", async () => {
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const siteTitlePhrases = [
     { text: "welcome to my website", lang: "en" },
-    { text: "مرحبا بكم في موقعي", lang: "ar" },
+    { text: "مَرْحَبًا بِكُمْ فِي مَوْقِعِي", lang: "ar" },
     { text: "bienvenue sur mon site", lang: "fr" },
     { text: "web siteme hoş geldiniz", lang: "tr" },
     { text: "私のウェブサイトへようこそ", lang: "ja" },
