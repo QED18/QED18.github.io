@@ -2383,3 +2383,25 @@ h3 {
     .q1-widget-shell { width:100%; }
     .q1-widget-shell > .q1-top-dancer {width:82px;transform:translate(-50%,-90%);}
 }
+
+/* Unified modern typography: technical Q1 identity and elegant Arabic welcome. */
+.linktree-panel .overline.overline-subtitle {
+  font-family:"Sora","Manrope",sans-serif;
+  font-weight:800;
+  font-size:clamp(1.65rem,3.5vw,2.15rem);
+  letter-spacing:.12em;
+  line-height:1.25;
+  color:#f3c97d;
+  text-shadow:0 0 18px rgba(243,201,125,.1);
+}
+.hero-title[data-title-lang="ar"],
+.hero-title[data-title-lang="ar"] #site-title-text {
+  font-family:"IBM Plex Sans Arabic","Manrope",sans-serif;
+  font-weight:600;
+  letter-spacing:0;
+  line-height:1.5;
+}
+.hero-title[data-title-lang="ar"] {
+  font-size:clamp(1.8rem,4vw,2.55rem);
+  direction:rtl;
+}
