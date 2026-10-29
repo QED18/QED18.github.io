@@ -46,10 +46,7 @@ const typedName = document.getElementById("typed-name");
 const nowPlayingElement = document.querySelector(".now-playing");
 const nowPlayingBars = Array.from(document.querySelectorAll(".now-playing__bars span"));
 const playlist = [
-    {id: 1239290183, title: "ISSAM - Trap Beldi"},
-    {id: 1234838421, title: "The Weeknd - Out of Time"},
-    {id: 1234833242, title: "Drake - 5AM in Toronto"},
-    {id: 1184188501, title: "Tame Impala - End Of Summer"}
+    {id: 1239290183, title: "ISSAM - Trap Beldi"}
 ];
 let currentTrackIndex = 0;
 let switchingTrack = false;
