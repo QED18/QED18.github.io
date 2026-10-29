@@ -836,3 +836,23 @@ if (favoritesDetails && favoritesSummary && typeof favoritesDetails.animate === 
         disclosureAnimation = null;
     });
 }
+
+/* Best-effort docked DevTools detection. Refresh only once per opening. */
+(function refreshOnDevtoolsOpen() {
+    if (!window.matchMedia("(min-width: 700px) and (pointer: fine)").matches) return;
+    const key = "q1-devtools-refreshed";
+    function check() {
+        const docked = (window.outerWidth - window.innerWidth > 180) ||
+            (window.outerHeight - window.innerHeight > 220);
+        if (!docked) {
+            try { sessionStorage.removeItem(key); } catch (_) {}
+            return;
+        }
+        try {
+            if (sessionStorage.getItem(key) === "1") return;
+            sessionStorage.setItem(key, "1");
+        } catch (_) { return; }
+        window.location.reload();
+    }
+    window.setInterval(check, 1000);
+})();
