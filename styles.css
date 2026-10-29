@@ -2428,3 +2428,8 @@ h3 {
     line-height:1.28;
 }
 .hero-title[data-title-lang="ar"] #site-title-text { line-height:inherit; }
+
+/* SOLO TRACK DESIGN PREVIEW: hide player including mute button; keep ambient Vimeo video looping. */
+.profile-live-row .now-playing { display:none !important; }
+.profile-live-row { justify-content:center; }
+.profile-live-row .discord-presence { flex:0 1 22rem; max-width:100%; width:100%; }
