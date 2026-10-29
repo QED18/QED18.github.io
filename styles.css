@@ -2517,3 +2517,31 @@ h3 {
 @media(prefers-reduced-motion:reduce) {
   .q1-widget-shell > .linktree-panel { -webkit-backdrop-filter:none;backdrop-filter:none; }
 }
+
+/* Preview refinement: remove rotating welcome headline and the height it reserves. */
+.q1-widget-shell > .linktree-panel .hero-title {
+    display:none !important;
+    min-height:0 !important;
+    height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+}
+.q1-widget-shell > .linktree-panel {
+    background:rgba(9,11,16,.86);
+    -webkit-backdrop-filter:blur(12px);
+    backdrop-filter:blur(12px);
+    gap:.9rem;
+    box-shadow:0 25px 75px rgba(0,0,0,.42);
+}
+.q1-widget-shell .overline.overline-subtitle {
+    font-size:clamp(2.35rem,5.5vw,3.15rem);
+    margin-bottom:.05rem;
+}
+.q1-widget-shell .typing-line { margin:0; }
+.q1-widget-shell .micro-bio { margin:0 0 .2rem; }
+.q1-widget-shell .profile-live-row { margin:.25rem 0 0; }
+.q1-widget-shell .link-list { margin-top:0; }
+.q1-widget-shell .taste-strip { margin-top:.1rem; }
+@media(max-width:640px) {
+    .q1-widget-shell > .linktree-panel { gap:.76rem; }
+}
