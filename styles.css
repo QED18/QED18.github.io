@@ -2545,3 +2545,20 @@ h3 {
 @media(max-width:640px) {
     .q1-widget-shell > .linktree-panel { gap:.76rem; }
 }
+
+/* Identity order: Q1, AKA, multilingual welcome, then bio. */
+.q1-widget-shell > .linktree-panel .overline.overline-subtitle { order:1; margin:0; }
+.q1-widget-shell > .linktree-panel .typing-line { order:2; margin:0; }
+.q1-widget-shell > .linktree-panel .hero-title {
+    display:inline-flex !important;
+    order:3;
+    height:auto !important;
+    min-height:0 !important;
+    padding:0 !important;
+    margin:0 !important;
+    font-size:clamp(.87rem,2.3vw,1.04rem);
+    line-height:1.35;
+    color:rgba(245,241,233,.56);
+}
+.q1-widget-shell > .linktree-panel .hero-title[data-title-lang="ar"] { font-size:clamp(.86rem,2.1vw,.98rem); }
+.q1-widget-shell > .linktree-panel .micro-bio { order:4; margin:0; }
